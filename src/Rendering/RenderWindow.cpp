@@ -2,8 +2,6 @@
 #include "M3L/Rendering/RenderWindow.hpp"
 #include "M3L/Rendering/Sprite.hpp"
 
-#include <iostream>
-
 namespace m3l
 {
     RenderWindow::RenderWindow(ThreadPool &_tp, uint32_t _x, uint32_t _y, const std::string &_title)
