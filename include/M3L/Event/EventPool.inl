@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "M3L/Event/EventPool.hpp"
 
 namespace m3l

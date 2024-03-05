@@ -85,9 +85,12 @@ namespace m3l
         // but function is public so undefined behavior
         std::ignore = _size;
         std::vector<Vertex3D> vtx(_vtx, _vtx + _size);
+        Point2<float> size = _txtr->getSize().as<float>();
 
-        for (auto &_mvtx : vtx)
+        for (auto &_mvtx : vtx) {
             _mvtx.pos = m_cam.project(_mvtx.pos);
+            _mvtx.txtrPos = _mvtx.txtrPos * size;
+        }
         // caluclate minimal range of the drawing on y axes
         int32_t ystart = static_cast<int32_t>(std::max(std::min({ vtx[0].pos.y, vtx[1].pos.y, vtx[2].pos.y }), 0.f));
         int32_t yend = static_cast<int32_t>(std::min(std::max({ vtx[0].pos.y, vtx[1].pos.y, vtx[2].pos.y }), static_cast<float>(getSize().y)));
@@ -125,7 +128,7 @@ namespace m3l
     {
         HDC hdc = GetDC(NULL);
         BITMAPINFO bmi;
-        
+
         m_bpp = _bpp;
         bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
         bmi.bmiHeader.biWidth = _x;

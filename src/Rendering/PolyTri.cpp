@@ -63,8 +63,7 @@ namespace m3l
             if (_vtx[it].pos.y == _line && _line == _vtx[it + 1].pos.y) {
                 res = { std::min(_vtx[it].pos.x, _vtx[(it + 1) % 3].pos.x), std::max(_vtx[it].pos.x, _vtx[(it + 1) % 3].pos.x) };
                 break;
-            }
-            else if ((_vtx[it].pos.y <= _line && _line <= _vtx[(it + 1) % 3].pos.y) ||
+            } else if ((_vtx[it].pos.y <= _line && _line <= _vtx[(it + 1) % 3].pos.y) ||
                 (_vtx[(it + 1) % 3].pos.y <= _line && _line <= _vtx[it].pos.y)) {
                 clres = _vtx[it].pos.x;
 

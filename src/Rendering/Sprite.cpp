@@ -10,7 +10,6 @@ namespace m3l
 
     void Sprite::setTexture(Texture &_img)
     {
-
         m_txtr = _img;
 
         processRect();
