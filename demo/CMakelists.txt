@@ -13,6 +13,19 @@ else ()
     target_compile_options(demo_2drender PRIVATE -Wall -Wextra -g3)
 endif ()
 
+# 2D Render
+add_executable(demo_3drender 3d_render.cpp)
+
+target_link_libraries(demo_3drender M3L)
+target_include_directories(demo_3drender PRIVATE ${M3L_INCLUDE_DIRS})
+
+if (MSVC)
+    target_compile_options(demo_3drender PRIVATE /W4)
+    target_compile_definitions(demo_3drender PUBLIC NOMINMAX)
+else ()
+    target_compile_options(demo_3drender PRIVATE -Wall -Wextra -g3)
+endif ()
+
 # Event
 add_executable(demo_event event.cpp)
 
