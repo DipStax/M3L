@@ -1,6 +1,8 @@
 #include "M3L/Rendering/RenderWindow.hpp"
 #include "M3L/Rendering/Sprite.hpp"
 
+#include <iostream>
+
 int main()
 {
     m3l::ThreadPool tp;
