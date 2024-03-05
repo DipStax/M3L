@@ -17,18 +17,10 @@ namespace m3l
         public:
             Model();
             ~Model() = default;
-            Model(const Model &_model);
-            Model &operator=(const Model &_model);
-
-            Model copy() const;
 
             void load(const std::string &_path);
 
-            void setTextureId(size_t _id);
-            [[nodiscard]] size_t getTextureId() const;
-
-            void setTexture(std::shared_ptr<Texture> _txtr);
-            [[nodiscard]] std::shared_ptr<Texture> getTexture() const;
+            void setTexture(Texture _txtr);
 
         protected:
             void draw(RenderTarget &_target, const Texture *_txtr) const;
@@ -54,7 +46,6 @@ namespace m3l
             std::vector<m3l::Vector3<float>> m_vp;
             std::vector<std::vector<Vertex3D>> m_f;
 
-            std::shared_ptr<Texture> m_txtr = nullptr;
-            size_t m_txtrId = 0;
+            Texture m_txtr;
     };
 }

@@ -11,35 +11,6 @@ namespace m3l
         Init();
     }
 
-    Model::Model(const Model &_model)
-        : m_v(_model.m_v), m_vn(_model.m_vn), m_vt(_model.m_vt), m_vp(_model.m_vp),
-          m_f(_model.m_f), m_txtr(_model.m_txtr), m_txtrId(_model.m_txtrId)
-    {
-    }
-
-
-    Model &Model::operator=(const Model &_model)
-    {
-        if (this == &_model)
-            return *this;
-        m_v = _model.m_v;
-        m_vn = _model.m_vn;
-        m_vt = _model.m_vt;
-        m_vp = _model.m_vp;
-        m_vp = _model.m_vp;
-        m_f = _model.m_f;
-        m_txtr = _model.m_txtr;
-        m_txtrId = _model.m_txtrId;
-        return *this;
-    }
-
-    Model Model::copy() const
-    {
-        Model model = *this;
-
-        return model;
-    }
-
     void Model::load(const std::string &_path)
     {
         std::ifstream file;
@@ -53,35 +24,20 @@ namespace m3l
                 try {
                     (this->*(m_fnParsing[pair.first]))(line);
                 } catch (std::exception &_excp) {
-                    throw std::runtime_error("[Mdoel](" + _path + "): Internal error: " + _excp.what() + " | '" + line + "'");
+                    throw std::runtime_error("[Model](" + _path + "): Internal error: " + _excp.what() + " | '" + line + "'");
                 }
             }
             else if (!line.empty() && line.at(0) == '#') {
                 fnComment("");
             } else if (!line.empty()) {
-                throw std::runtime_error("[Mdoel](" + _path + "): Unknow flag: '" + line + "'");
+                throw std::runtime_error("[Model](" + _path + "): Unknow flag: '" + line + "'");
             }
         }
     }
 
-    void Model::setTextureId(size_t _id)
-    {
-        m_txtrId = _id;
-    }
-
-    size_t Model::getTextureId() const
-    {
-        return m_txtrId;
-    }
-
-    void Model::setTexture(std::shared_ptr<Texture> _txtr)
+    void Model::setTexture(Texture _txtr)
     {
         m_txtr = _txtr;
-    }
-
-    std::shared_ptr<Texture> Model::getTexture() const
-    {
-        return m_txtr;
     }
 
     void Model::draw(RenderTarget& _target, const Texture* _txtr) const
@@ -89,7 +45,7 @@ namespace m3l
         std::ignore = _txtr;
 
         for (const auto& _f : m_f)
-            _target.draw(_f.data(), _f.size(), m_txtr.get());
+            _target.draw(_f.data(), _f.size(), &m_txtr);
     }
 
     void Model::Init()
