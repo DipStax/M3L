@@ -1,10 +1,10 @@
-# 3ML
+# M3L
 
-Stand for **M**y **M**ulti**M**edia library
+Stand for **M**y **M**ulti**M**edia **L**ibrary
 
 ## Purpose
 
-The goal of this project is to create a cross platform (_linux_ and _Windows_) multimedia library that will go across those topic:
+The goal of this project is to create a cross platform (_linux_ and _Windows_) multimedia library that will go across those topic (for now):
 
 ### System:
 

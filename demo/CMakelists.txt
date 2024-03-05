@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.24)
+
+# 2D Render
+add_executable(demo_2drender 2d_render.cpp)
+
+target_link_libraries(demo_2drender M3L)
+target_include_directories(demo_2drender PRIVATE ${M3L_INCLUDE_DIRS})
+
+if (MSVC)
+    target_compile_options(demo_2drender PRIVATE /W4)
+    target_compile_definitions(demo_2drender PUBLIC NOMINMAX)
+else ()
+    target_compile_options(demo_2drender PRIVATE -Wall -Wextra -g3)
+endif ()
+
+# Event
+add_executable(demo_event event.cpp)
+
+target_link_libraries(demo_event M3L)
+target_include_directories(demo_event PRIVATE ${M3L_INCLUDE_DIRS})
+
+if (MSVC)
+    target_compile_options(demo_event PRIVATE /W4)
+    target_compile_definitions(demo_event PUBLIC NOMINMAX)
+else ()
+    target_compile_options(demo_event PRIVATE -Wall -Wextra -g3)
+endif ()
