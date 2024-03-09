@@ -26,7 +26,12 @@ namespace m3l
             void rotate(float _rot);
             [[nodiscard]] float getRotation() const;
 
+        protected:
+            [[nodiscard]] bool requiredUpdate() const;
+
         private:
+            mutable bool m_update = false;
+
             Point2<float> m_pos{};
             Point2<float> m_scale = { 1, 1 };
             float m_rotation = 0.f;
