@@ -23,12 +23,12 @@ namespace m3l
             void draw(RenderTarget &_target, const Texture *_txtr) const override;
 
         private:
-            void buildVertex();
             void processRect();
+            void buildVertex(bool _update = false) const;
 
             Texture *m_txtr = nullptr;
 
-            VertexArray m_vertex{};
+            mutable VertexArray m_vertex{};
 
             Rect m_rect;
     };
