@@ -10,41 +10,9 @@ namespace m3l
 
     void Sprite::setTexture(Texture &_img)
     {
-        m_txtr = _img;
+        m_txtr = &_img;
 
         processRect();
-    }
-
-    void Sprite::setPosition(float _x, float _y)
-    {
-        setPosition({ _x, _y });
-    }
-
-    void Sprite::setPosition(const Point2<float> &_pos)
-    {
-        m_pos = _pos;
-        processRect();
-    }
-
-    Point2<float> Sprite::getPosition() const
-    {
-        return m_pos;
-    }
-
-    void Sprite::setScale(float _rh, float _rw)
-    {
-        setScale({ _rh, _rw });
-    }
-
-    void Sprite::setScale(const Point2<float> &_scale)
-    {
-        m_scale = _scale;
-        processRect();
-    }
-
-    Point2<float> Sprite::getScale() const
-    {
-        return m_scale;
     }
 
     void Sprite::setTxtrRect(Rect _rect)
@@ -62,14 +30,14 @@ namespace m3l
     {
         std::ignore = _txtr;
 
-        _target.draw(m_vertex, &m_txtr);
+        _target.draw(m_vertex, m_txtr);
     }
 
     void Sprite::processRect()
     {
-        Point2<float> size = m_txtr.getSize().as<float>();
+        Point2<float> size = (m_txtr) ? m_txtr->getSize().as<float>() : Point2<float>(0.f , 0.f);
 
-        m_rect = { m_pos, size * m_scale };
+        m_rect = { getPosition(), size * getScale() };
         buildVertex();
     }
 
