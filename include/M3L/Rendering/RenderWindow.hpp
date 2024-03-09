@@ -17,8 +17,6 @@ namespace m3l
 
             [[nodiscard]] Point2<uint32_t> getSize() const;
 
-            void setCamera(const Camera& _cam);
-
             bool pollEvent(Event &_event);
 
             void display();
@@ -33,7 +31,6 @@ namespace m3l
             void onFocus(Event _event) override;
 
         private:
-            Camera m_cam;
             Point2<uint32_t> m_size;
 
             ts::Queue<Event> m_event;

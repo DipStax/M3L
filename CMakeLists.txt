@@ -8,6 +8,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
 
 file(GLOB_RECURSE SRC_M3L
     include/**.inl
+    include/**.hpp
     src/**.cpp
 )
 
