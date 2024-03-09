@@ -19,11 +19,6 @@ namespace m3l
         return m_size;
     }
 
-    void RenderWindow::setCamera(const Camera &_cam)
-    {
-        m_cam = _cam;
-    }
-
     bool RenderWindow::pollEvent(Event &_event)
     {
         disptachEvent();
