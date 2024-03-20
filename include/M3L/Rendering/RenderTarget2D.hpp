@@ -5,7 +5,7 @@
 
 namespace m3l
 {
-    class RenderTarget2D
+    class M3L_API RenderTarget2D
     {
         public:
             virtual ~RenderTarget2D();
@@ -19,14 +19,14 @@ namespace m3l
             void draw(const Vertex2D *_vtx, size_t _size, const Texture *_txtr);
             void draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type);
 
-            void clear(const Color &_clr = { 0, 0, 0, 255 });
-
         protected:
             RenderTarget2D() = default;
 
             void create(uint32_t _x, uint32_t _y, uint8_t _bpp = 32);
 
-            [[nodiscard]] uint8_t *getData() const;
+            void clear(const Color &_clr = { 0, 0, 0, 255 });
+
+            [[nodiscard]] const uint8_t *getData() const;
 
         private:
             void drawLine(const Vertex2D &_start, const Vertex2D &_end);

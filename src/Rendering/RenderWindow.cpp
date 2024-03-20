@@ -31,6 +31,12 @@ namespace m3l
         InvalidateRect(getWindow(), NULL, FALSE);
     }
 
+    void RenderWindow::clear(const Color &_clr)
+    {
+        RenderTarget2D::clear(_clr);
+        RenderTarget3D::clear(_clr);
+    }
+
     void RenderWindow::create(uint32_t _x, uint32_t _y, const Camera &_cam, uint8_t _bpp)
     {
         m_size = { _x, _y };

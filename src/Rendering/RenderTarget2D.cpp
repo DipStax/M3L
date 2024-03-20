@@ -88,6 +88,21 @@ namespace m3l
         ReleaseDC(NULL, hdc);
     }
 
+    void RenderTarget2D::clear(const Color &_clr)
+    {
+        uint32_t clr = CLR(_clr);
+        size_t size = getSize().x * getSize().y * m_bpp;
+
+        for (size_t it = 0; it < size; it += sizeof(uint32_t))
+            std::memcpy(m_data + it, &clr, sizeof(uint32_t));
+    }
+
+    const uint8_t *RenderTarget2D::getData() const
+    {
+        return m_data;
+    }
+
+
     void RenderTarget2D::drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture * _txtr)
     {
         Point2<float> pos;

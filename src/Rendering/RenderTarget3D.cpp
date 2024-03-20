@@ -68,6 +68,21 @@ namespace m3l
         m_depth.resize(_x * _y, std::numeric_limits<float>::lowest());
     }
 
+    void RenderTarget3D::clear(const Color &_clr)
+    {
+        uint32_t clr = CLR(_clr);
+        size_t size = getSize().x * getSize().y * m_bpp;
+
+        for (size_t it = 0; it < size; it += sizeof(uint32_t))
+            std::memcpy(m_data + it, &clr, sizeof(uint32_t));
+        std::fill(m_depth.begin(), m_depth.end(), std::numeric_limits<float>::lowest());
+    }
+
+    const uint8_t *RenderTarget3D::getData() const
+    {
+        return m_data;
+    }
+
     // need strategy of Vertex link
     // need for size handling depending on strategy
     void RenderTarget3D::draw(const Vertex3D *_vtx, size_t _size, const Texture *_txtr)

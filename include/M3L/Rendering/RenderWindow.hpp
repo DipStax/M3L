@@ -22,6 +22,8 @@ namespace m3l
 
             void display();
 
+            void clear(const Color &_clr = { 0, 0, 0, 255 });
+
         protected:
             void create(uint32_t _x, uint32_t _y, const Camera &_cam = Camera(), uint8_t _bpp = 32);
 
