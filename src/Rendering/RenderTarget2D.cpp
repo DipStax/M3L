@@ -102,6 +102,21 @@ namespace m3l
         return m_data;
     }
 
+    void RenderTarget2D::drawLine(const Vertex2D &_start, const Vertex2D &_end)
+    {
+        Point2<uint32_t> derivate = (_end.pos - _start.pos).as<uint32_t>();
+        uint32_t endx = static_cast<uint32_t>(_end.pos.x);
+        uint32_t delta = 2 * derivate.y - derivate.x;
+
+        for (Point2<uint32_t> pos = _start.pos.as<uint32_t>(); pos.x < endx; pos.x++) {
+            setPixel(pos, { 0, 0, 0, 255 });
+            if (delta > 0) {
+                pos.y++;
+                delta -= 2 * derivate.x;
+            }
+            delta += 2 * derivate.y;
+        }
+    }
 
     void RenderTarget2D::drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture * _txtr)
     {
