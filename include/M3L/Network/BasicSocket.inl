@@ -9,6 +9,13 @@ namespace m3l::net
 
         return !(recv(m_socket, &buffer, 1, MSG_PEEK) == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK);
     }
+
+    template<IsBaseIp T, prot _T>
+    BasicSocket<T, _T>::BasicSocket()
+    {
+        close();
+    }
+
     template<IsBaseIp T, prot _T>
     bool BasicSocket<T, _T>::close()
     {

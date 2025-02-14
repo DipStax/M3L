@@ -11,6 +11,8 @@ namespace m3l::net
             using IpVersion = T;
             constexpr prot Protocol = _T;
 
+            virtual ~BasicSocket();
+
             [[nodiscard]] bool is_open() const;
 
             void close();
@@ -18,6 +20,7 @@ namespace m3l::net
         protected:
             BasicSocket() = default;
             BasicSocket(const BasicSocket &&_bs) noexcept;
+
             BasicSocket(WIN_SOCKET _socket, sockaddr_in _addr);
             void retreive_port();
 

@@ -7,4 +7,11 @@ namespace m3l::net
         TCP,
         UDP
     };
+
+    enum RecvStrat
+    {
+        All = MSG_OOB,
+        Peek = MSG_PEEK,
+        WaitAll = MSG_WAITALL
+    };
 }

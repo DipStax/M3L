@@ -18,9 +18,7 @@ namespace m3l::net
             Acceptor(Ip<T> _ip, uint32_t _port = 0);
 
             bool bind(Ip<T> _ip, uint32_t _port = 0);
-
             bool listen(int _max = std::max(SOMAXCONN, M3L_NET_LISTEN_MAX));
-
             BasicSocketType accept();
     };
 }
