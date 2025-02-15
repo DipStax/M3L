@@ -2,7 +2,7 @@
 
 namespace m3l::net
 {
-    enum prot
+    enum Protocol
     {
         TCP,
         UDP

@@ -1,4 +1,5 @@
 #include "M3L/Network/Ip.hpp"
+#include "Tool/Splitter.hpp"
 
 namespace m3l::net
 {
@@ -21,7 +22,7 @@ namespace m3l::net
         uint8_t shift = 0;
 
         split::multiple(_ip, '.') | std::views::for_each([] (const std::string _val) {
-            m_raw |= static_cast<RawContainer>(_bytes) << (shift++ * 8);
+            m_raw |= static_cast<RawContainer>(std::stoi(_val)) << (shift++ * 8);
         });
     }
 

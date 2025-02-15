@@ -2,40 +2,60 @@
 #include <iostream>
 
 #include "M3L/Network/Acceptor.hpp"
+#include "M3L/Network/Socket.hpp"
 
 #define PORT 8080
 
 using TcpAcceptorV4 = m3l::net::Acceptor<
     m3l::net::ip::v4,
-    m3l::net::prot::TCP
+    m3l::net::Protocol::TCP
 >;
 
 using TcpSocketV4 = m3l::net::Socket<TcpAcceptorV4::BasicSocketType>;
 
-void server()
+void server(bool &_listening)
 {
     TcpAcceptorV4 acceptor = TcpAcceptorV4{ m3l::net::Ip<m3l::net::ip::v4>{"127.0.0.1"}, PORT };
+
+    if (!acceptor.is_open()) {
+        std::cout << "Client not connected to server" << std::endl;
+        return;
+    }
     acceptor.listen();
+    std::cout << "Server listening" << std::endl;
+    _listening = true;
 
     TcpSocketV4 socket = TcpSocketV4{ std::move(acceptor.accept()) };
-    socket.send([ 115, 101, 110, 100, 0 ], 5);
+    std::cout << "Client connected to server (from server)" << std::endl;
+    socket.send({ 115, 101, 110, 100, 0 }, 5);
+    std::cout << "Server socket send package" << std::endl;
 }
 
 int main()
 {
-    std::thread server_thread{ server };
+    bool server_listen = false;
+    std::thread server_thread{ server, server_listen };
+
+    while (!server_listen) {}
 
     TcpSocketV4 client{ m3l::net::Ip<m3l::net::ip::v4>{"127.0.0.1"}, PORT };
-    {};
 
     if (!client.is_open()) {
         std::cout << "Client not connected to server" << std::endl;
         return 1;
     }
+    std::cout << "Client connected to server" << std::endl;
 
     std::array<uint8_t, 5> data = client.receive();
+    std::cout << "Received package: '";
+
+    for (int i = 0; i < 5; i++)
+        std::cout << static_cast<char>(data.at(i));
+    std::cout << "'" << std::endl;
 
     while (!server_thread.joinable()) {}
     server_thread.join();
+    std::cout << "Server thread joined" << std::endl;
+
     return 0;
 }

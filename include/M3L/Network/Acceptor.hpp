@@ -1,6 +1,8 @@
 #pragma once
 
 #include "M3L/Network/CSocket.hpp"
+#include "M3L/Network/BasicSocket.hpp"
+#include "M3L/Network/Ip.hpp"
 
 #ifndef M3L_NET_LISTEN_MAX
     #define M3L_NET_LISTEN_MAX 1
@@ -8,7 +10,7 @@
 
 namespace m3l::net
 {
-    template<IsBaseIp T, prot _T>
+    template<IsBaseIp T, Protocol _T>
     class Acceptor : public BasicSocket<T, _T>
     {
         public:

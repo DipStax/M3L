@@ -39,7 +39,7 @@ namespace m3l::net
             void set(const std::string &_ip);
 
             template<class ...Ts>
-            requires IsByteIpFormat<T, Ts...>;
+            requires IsByteIpFormat<T, Ts...>
             constexpr void set(const Ts ..._bytes);
 
             [[nodiscard]] constexpr RawContainer raw() const;

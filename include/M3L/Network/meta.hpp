@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Tool/PreProcessing.hpp"
+#include "M3L/Network/Protocol.hpp"
 
 #define WIN_SOCKET SOCKET
 
@@ -26,6 +27,10 @@ namespace m3l
 
     namespace net
     {
+        /// -----------------------------------
+        /// Ip
+        /// -----------------------------------
+
         namespace ip
         {
             struct v4;
@@ -34,21 +39,30 @@ namespace m3l
 
         template<class T>
         concept IsBaseIpFormat = IsUInt<typename T::Container> && requires {
-                { T::size } -> std::same_as<uint8_t>;
-                { T::familly } -> std::same_as<int>;
+                { T::size } -> std::same_as<const uint8_t &>;
+                { T::familly } -> std::same_as<const int &>;
             } && sizeof(typename T::Container) >= T::size;
 
         template<class T>
         concept IsBaseIp = (std::same_as<T, m3l::net::ip::v4> || std::same_as<T, m3l::net::ip::v6>);
-            //&& IsBaseIpFormat<T>; // template property propagation
 
         template<class T, class ...Ts>
-        concept IsByteIpFormat = IsBaseIpFormat<T> && (sizeof...(Ts) == T::size || (std::is_convertible_v<Ts, uint8_t> && ...));
+        concept IsByteIpFormat = IsBaseIpFormat<T> && (sizeof...(Ts) == T::size && (std::is_same_v<Ts, uint8_t> && ...));
 
         template<IsBaseIpFormat T>
         class Ip;
 
         template<class T>
         concept IsIpFormat = m3l::meta::is_base_of_template<m3l::net::Ip, T>::value;
+
+        /// -----------------------------------
+        /// Socket
+        /// -----------------------------------
+
+        template<IsBaseIp T, Protocol _T>
+        class BaseSocket;
+
+        template<class T>
+        concept IsBaseSocket = m3l::meta::is_base_of_template<m3l::net::BaseSocket, T>::value;
     }
 }

@@ -4,12 +4,12 @@
 
 namespace m3l::net::c
 {
-    template<IsBaseIp T, m3l::net::prot _T>
+    template<IsBaseIp T, Protocol _T>
     constexpr WIN_SOCKET Socket::create()
     {
-        if constexpr (_T == m3l::net::prot::TCP) {
+        if constexpr (_T == Protocol::TCP) {
             return m3l::net::c::Socket::create(T::familly, SOCK_STREAM, IPPROTO_TCP);
-        } else if constexpr (_T == m3l::net::prot::UDP) {
+        } else if constexpr (_T == Protocol::UDP) {
             return m3l::net::c::Socket::create(T::familly, SOCK_DGRAM, IPPROTO_UDP);
         } else constexpr {
             static_assert(false, "Unknow protocol");

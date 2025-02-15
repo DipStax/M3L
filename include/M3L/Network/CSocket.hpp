@@ -5,7 +5,6 @@
 
 #include <WinSock2.h>
 
-#include "M3L/Network/Protocol.hpp"
 #include "M3L/Network/meta.hpp"
 #include "Tool/Expected.hpp"
 
@@ -17,7 +16,7 @@ namespace m3l::net
         /// @brief C++ binding struct for file descriptor scoket.
         struct Socket
         {
-            template<IsBaseIp T, m3l::net::prot _T>
+            template<IsBaseIp T, Protocol _T>
             [[nodiscard]] static constexpr WIN_SOCKET create();
 
             /// @brief C++ binding to the C function socket.
