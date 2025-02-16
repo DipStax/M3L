@@ -10,7 +10,7 @@ namespace m3l::net
     {
         public:
             using IpVersion = T;
-            constexpr Protocol Protocol = _T;
+            static constexpr Protocol Protocol = _T;
 
             virtual ~BasicSocket();
 
@@ -20,10 +20,10 @@ namespace m3l::net
 
         protected:
             BasicSocket() = default;
-            BasicSocket(const BasicSocket &&_bs) noexcept;
+            BasicSocket(const BasicSocket<T, _T> &&_bs) noexcept;
             BasicSocket(WIN_SOCKET _socket, sockaddr_in _addr);
 
-            int retreive_port();
+            int retreive_port() const;
 
             sockaddr_in m_addr{};
             WIN_SOCKET m_socket = SOCKET_ERROR;

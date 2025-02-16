@@ -11,11 +11,14 @@ using TcpAcceptorV4 = m3l::net::Acceptor<
     m3l::net::Protocol::TCP
 >;
 
-using TcpSocketV4 = m3l::net::Socket<TcpAcceptorV4::BasicSocketType>;
+using TcpSocketV4 = m3l::net::Socket<
+    m3l::net::ip::v4,
+    m3l::net::Protocol::TCP
+>;
 
-void server(bool &_listening)
+void server(bool& _listening, std::string _local_ip)
 {
-    TcpAcceptorV4 acceptor = TcpAcceptorV4{ m3l::net::Ip<m3l::net::ip::v4>{"127.0.0.1"}, PORT };
+    TcpAcceptorV4 acceptor = TcpAcceptorV4{ m3l::net::Ip<m3l::net::ip::v4>(_local_ip), PORT };
 
     if (!acceptor.is_open()) {
         std::cout << "Client not connected to server" << std::endl;
@@ -24,21 +27,23 @@ void server(bool &_listening)
     acceptor.listen();
     std::cout << "Server listening" << std::endl;
     _listening = true;
+    const uint8_t data[] = { 115, 101, 110, 100, 0 };
 
     TcpSocketV4 socket = TcpSocketV4{ std::move(acceptor.accept()) };
     std::cout << "Client connected to server (from server)" << std::endl;
-    socket.send({ 115, 101, 110, 100, 0 }, 5);
+    socket.send(data, 5);
     std::cout << "Server socket send package" << std::endl;
 }
 
 int main()
 {
+    std::string local_ip = "127.0.0.1";
     bool server_listen = false;
-    std::thread server_thread{ server, server_listen };
+    std::thread server_thread{ server, server_listen, local_ip };
 
     while (!server_listen) {}
 
-    TcpSocketV4 client{ m3l::net::Ip<m3l::net::ip::v4>{"127.0.0.1"}, PORT };
+    TcpSocketV4 client{ m3l::net::Ip<m3l::net::ip::v4>(local_ip), PORT };
 
     if (!client.is_open()) {
         std::cout << "Client not connected to server" << std::endl;
@@ -46,7 +51,7 @@ int main()
     }
     std::cout << "Client connected to server" << std::endl;
 
-    std::array<uint8_t, 5> data = client.receive();
+    std::array<uint8_t, 5> data = client.receive<5>();
     std::cout << "Received package: '";
 
     for (int i = 0; i < 5; i++)

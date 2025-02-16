@@ -32,6 +32,8 @@ namespace m3l::net
             using RawContainer = typename T::Container;
 
             Ip() = default;
+            template<class _T>
+            Ip(const _T &_arg);
             template<class ...Ts>
             Ip(const Ts &&..._args);
 

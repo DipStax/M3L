@@ -27,7 +27,7 @@ namespace m3l::net
     }
 
     template<IsBaseIp T, Protocol _T>
-    BasicSocket<T, _T>::BasicSocket(const BasicSocket<T, _T>&& _bs)
+    BasicSocket<T, _T>::BasicSocket(const BasicSocket<T, _T> &&_bs) noexcept
         : m_socket(std::move(_bs.m_socket)), m_addr(_bs.m_addr)
     {
     }
@@ -40,7 +40,7 @@ namespace m3l::net
     }
 
     template<IsBaseIp T, Protocol _T>
-    int BasicSocket<T, _T>::retreive_port()
+    int BasicSocket<T, _T>::retreive_port() const
     {
         if (!is_open()) {
             // throw

@@ -7,7 +7,7 @@ namespace m3l::net
         template<IsBaseIp T>
         bool Socket<T, Protocol::UDP>::send(const uint8_t *_data, size_t _size)
         {
-            return ::sendto(m_socket, _data, _size, 0, reinterpret_cast<sockaddr *>(m_addr), sizeof(sockaddr_in)) > 0;
+            return sendto(m_socket, _data, _size, 0, reinterpret_cast<sockaddr *>(m_addr), sizeof(sockaddr_in)) > 0;
         }
 
         template<IsBaseIp T>
@@ -29,7 +29,7 @@ namespace m3l::net
         }
 
         template<IsBaseIp T>
-        template<size_t _T = std::numeric_limit<size_t>::max()>
+        template<size_t _T>
         std::array<uint8_t, _T> Socket<T, Protocol::TCP>::receive(RecvStrat _strat)
         {
             std::array<uint8_t, _T> data;
@@ -54,8 +54,14 @@ namespace m3l::net
     }
 
     template<IsBaseIp T, Protocol _T>
-    Socket<T, _T>::Socket(const BaseSocket<T, _T> &&_bs) noexcept
+    Socket<T, _T>::Socket(const BasicSocket<T, _T> &&_bs) noexcept
        : imp::Socket<T, _T>(std::move(_bs))
     {
+    }
+
+    template<IsBaseIp T, Protocol _T>
+    bool Socket<T, _T>::connect(const Ip<T>& _ip, uint32_t _port)
+    {
+
     }
 }

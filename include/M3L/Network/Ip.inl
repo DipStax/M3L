@@ -1,8 +1,18 @@
 #include "M3L/Network/Ip.hpp"
 #include "Tool/Splitter.hpp"
 
+#include <ranges>
+#include <algorithm>
+
 namespace m3l::net
 {
+    template<IsBaseIpFormat T>
+    template<class _T>
+    Ip<T>::Ip(const _T &_arg)
+    {
+        set(_arg);
+    }
+
     template<IsBaseIpFormat T>
     template<class ...Ts>
     Ip<T>::Ip(const Ts &&..._args)
@@ -21,7 +31,7 @@ namespace m3l::net
     {
         uint8_t shift = 0;
 
-        split::multiple(_ip, '.') | std::views::for_each([] (const std::string _val) {
+        split::multiple(_ip, '.') | std::ranges::for_each([] (const std::string _val) {
             m_raw |= static_cast<RawContainer>(std::stoi(_val)) << (shift++ * 8);
         });
     }

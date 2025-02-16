@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Tool/PreProcessing.hpp"
-#include "M3L/Network/Protocol.hpp"
 
 #define WIN_SOCKET SOCKET
 
@@ -19,10 +18,22 @@ namespace m3l
                 static constexpr std::false_type test(...);
                 using type = decltype(test(std::declval<_T*>()));
             };
+
+            template<template<typename, auto...> class T, class _T>
+            struct is_base_of_template_nttp
+            {
+                template<class __T, auto ...Ts>
+                static constexpr std::true_type  test(const T<__T, Ts...>*);
+                static constexpr std::false_type test(...);
+                using type = decltype(test(std::declval<_T*>()));
+            };
         }
 
         template<template<typename ...> class T, class _T>
         using is_base_of_template = typename imp::is_base_of_template<T, _T>::type;
+
+        template<template<typename, auto...> class T, class _T>
+        using is_base_of_template_nttp = typename imp::is_base_of_template_nttp<T, _T>::type;
     }
 
     namespace net
@@ -59,10 +70,12 @@ namespace m3l
         /// Socket
         /// -----------------------------------
 
+        enum Protocol;
+
         template<IsBaseIp T, Protocol _T>
-        class BaseSocket;
+        class BasicSocket;
 
         template<class T>
-        concept IsBaseSocket = m3l::meta::is_base_of_template<m3l::net::BaseSocket, T>::value;
+        concept IsBaseSocket = m3l::meta::is_base_of_template_nttp<m3l::net::BasicSocket, T>::value;
     }
 }

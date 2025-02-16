@@ -11,8 +11,6 @@ namespace m3l::net::c
             return m3l::net::c::Socket::create(T::familly, SOCK_STREAM, IPPROTO_TCP);
         } else if constexpr (_T == Protocol::UDP) {
             return m3l::net::c::Socket::create(T::familly, SOCK_DGRAM, IPPROTO_UDP);
-        } else constexpr {
-            static_assert(false, "Unknow protocol");
         }
     }
 

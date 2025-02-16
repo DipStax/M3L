@@ -24,3 +24,5 @@ namespace m3l::net
             BasicSocketType accept();
     };
 }
+
+#include "M3L/Network/Acceptor.inl"
