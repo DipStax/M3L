@@ -22,7 +22,7 @@ namespace m3l::net
         bool ok = c::Socket::close(m_socket);
 
         if (ok)
-            m_socket = SOCKET_ERROR;
+            this->m_socket = SOCKET_ERROR;
         return ok;
     }
 

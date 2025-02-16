@@ -7,7 +7,7 @@ namespace m3l::net
         template<IsBaseIp T>
         bool Socket<T, Protocol::UDP>::send(const uint8_t *_data, size_t _size)
         {
-            return sendto(m_socket, _data, _size, 0, reinterpret_cast<sockaddr *>(m_addr), sizeof(sockaddr_in)) > 0;
+            return sendto(this->m_socket, _data, _size, 0, reinterpret_cast<sockaddr *>(this->m_addr), sizeof(sockaddr_in)) > 0;
         }
 
         template<IsBaseIp T>
@@ -16,7 +16,7 @@ namespace m3l::net
         {
             std::array<uint8_t, _T> data;
 
-            if (recvfrom(m_socket, data.data(), _T, 0, reinterpret_cast<sockaddr *>(m_addr), sizeof(sockaddr_in)) == SOCKET_ERROR) {
+            if (recvfrom(this->m_socket, data.data(), _T, 0, reinterpret_cast<sockaddr *>(this->m_addr), sizeof(sockaddr_in)) == SOCKET_ERROR) {
                 // throw exception
             }
             return data;
@@ -25,7 +25,7 @@ namespace m3l::net
         template<IsBaseIp T>
         bool Socket<T, Protocol::TCP>::send(const uint8_t *_data, size_t _size)
         {
-            return ::send(m_socket, _data, _size, 0) > 0;
+            return ::send(this->m_socket, _data, _size, 0) > 0;
         }
 
         template<IsBaseIp T>
@@ -34,7 +34,7 @@ namespace m3l::net
         {
             std::array<uint8_t, _T> data;
 
-            if (recv(m_socket, data.data(), _T, _strat) == SOCKET_ERROR) {
+            if (recv(this->m_socket, data.data(), _T, _strat) == SOCKET_ERROR) {
                 // throw exception
             }
             return data;

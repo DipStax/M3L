@@ -33,7 +33,13 @@ namespace m3l
         using is_base_of_template = typename imp::is_base_of_template<T, _T>::type;
 
         template<template<typename, auto...> class T, class _T>
+        constexpr bool is_base_of_template_v = is_base_of_template<T, _T>::value;
+
+        template<template<typename, auto...> class T, class _T>
         using is_base_of_template_nttp = typename imp::is_base_of_template_nttp<T, _T>::type;
+
+        template<template<typename, auto...> class T, class _T>
+        constexpr bool is_base_of_template_nttp_v = is_base_of_template_nttp<T, _T>::value;
     }
 
     namespace net
@@ -64,7 +70,7 @@ namespace m3l
         class Ip;
 
         template<class T>
-        concept IsIpFormat = m3l::meta::is_base_of_template<m3l::net::Ip, T>::value;
+        concept IsIpFormat = m3l::meta::is_base_of_template_v<m3l::net::Ip, T>;
 
         /// -----------------------------------
         /// Socket
@@ -76,6 +82,6 @@ namespace m3l
         class BasicSocket;
 
         template<class T>
-        concept IsBaseSocket = m3l::meta::is_base_of_template_nttp<m3l::net::BasicSocket, T>::value;
+        concept IsBaseSocket = m3l::meta::is_base_of_template_nttp_v<m3l::net::BasicSocket, T>;
     }
 }
