@@ -7,6 +7,7 @@
 
 #include "M3L/Network/meta.hpp"
 #include "Tool/Expected.hpp"
+#include "Tool/Export.hpp"
 
 namespace m3l::net
 {
@@ -24,7 +25,7 @@ namespace m3l::net
             /// @param _type The type of logique for communication.
             /// @param _proto Specific protocol type from the protocol familly.
             /// @return The file descriptor created.
-            [[nodiscard]] static constexpr WIN_SOCKET create(int _dom, int _type, int _proto);
+            [[nodiscard]] static M3L_API WIN_SOCKET create(int _dom, int _type, int _proto);
 
             template<IsIpFormat T>
             [[nodiscard]] static extstd::Expected<sockaddr_in, int> bind(WIN_SOCKET _socket, const T &_ip, uint32_t _port);
@@ -33,12 +34,12 @@ namespace m3l::net
             /// @param _socket File descriptor to modify
             /// @param _block If true the file descriptor will be blocking otherwise it will be non-blocking.
             /// @return True if the modification of the file descriptor succed otherwise false.
-            static bool blocking(WIN_SOCKET _socket, bool _block);
+            static M3L_API bool blocking(WIN_SOCKET _socket, bool _block);
 
             /// @brief C++ binding to the C function close.
             /// @param _socket File descriptor to close.
             /// @return True if the close function succed.
-            static bool close(WIN_SOCKET _socket);
+            static M3L_API bool close(WIN_SOCKET _socket);
 
         };
     }

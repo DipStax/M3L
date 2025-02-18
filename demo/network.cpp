@@ -31,15 +31,24 @@ void server(bool& _listening, std::string _local_ip)
 
     TcpSocketV4 socket = TcpSocketV4{ std::move(acceptor.accept()) };
     std::cout << "Client connected to server (from server)" << std::endl;
-    socket.send(data, 5);
+    if (socket.send(data, 5)) {
+        std::cout << "Error during data sending" << std::endl;
+    }
     std::cout << "Server socket send package" << std::endl;
 }
 
 int main()
 {
+    WSADATA wsaData;
+    int WSAResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+    if (WSAResult != 0) {
+        std::cout << "WSAStartup failed with error: " << WSAResult << std::endl;
+        return 1;
+    }
+
     std::string local_ip = "127.0.0.1";
     bool server_listen = false;
-    std::thread server_thread{ server, server_listen, local_ip };
+    std::thread server_thread{ server, std::ref(server_listen), local_ip };
 
     while (!server_listen) {}
 

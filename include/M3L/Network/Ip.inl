@@ -31,9 +31,9 @@ namespace m3l::net
     {
         uint8_t shift = 0;
 
-        split::multiple(_ip, '.') | std::ranges::for_each([] (const std::string _val) {
-            m_raw |= static_cast<RawContainer>(std::stoi(_val)) << (shift++ * 8);
-        });
+        std::vector<std::string> res = split::multiple(_ip, '.');
+        for (std::string _val : res)
+            this->m_raw |= static_cast<RawContainer>(std::stoi(_val)) << (shift++ * 8);
     }
 
     template<IsBaseIpFormat T>

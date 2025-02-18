@@ -25,7 +25,7 @@ namespace m3l::net
         template<IsBaseIp T>
         bool Socket<T, Protocol::TCP>::send(const uint8_t *_data, size_t _size)
         {
-            return ::send(this->m_socket, _data, _size, 0) > 0;
+            return ::send(this->m_socket, reinterpret_cast<const char*>(_data), static_cast<int>(_size), 0) > 0;
         }
 
         template<IsBaseIp T>
@@ -34,7 +34,7 @@ namespace m3l::net
         {
             std::array<uint8_t, _T> data;
 
-            if (recv(this->m_socket, data.data(), _T, _strat) == SOCKET_ERROR) {
+            if (recv(this->m_socket, reinterpret_cast<char *>(data.data()), _T, _strat) == SOCKET_ERROR) {
                 // throw exception
             }
             return data;
@@ -44,7 +44,9 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     Socket<T, _T>::Socket(const Ip<T> &_ip, uint32_t _port)
     {
-        connect(_ip, _port);
+        if (connect(_ip, _port)) {
+            throw;
+        }
     }
 
     template<IsBaseIp T, Protocol _T>
@@ -62,6 +64,6 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     bool Socket<T, _T>::connect(const Ip<T>& _ip, uint32_t _port)
     {
-
+        return false;
     }
 }

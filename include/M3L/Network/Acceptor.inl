@@ -36,6 +36,6 @@ namespace m3l::net
         int len = sizeof(sockaddr_in);
         WIN_SOCKET socket = ::accept(this->m_socket, reinterpret_cast<sockaddr *>(&addr), &len);
 
-        return BasicSocketType(socket, addr);
+        return BasicSocket<T, _T>::create(socket, addr);
     }
 }

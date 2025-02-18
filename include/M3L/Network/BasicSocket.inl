@@ -27,6 +27,13 @@ namespace m3l::net
     }
 
     template<IsBaseIp T, Protocol _T>
+    BasicSocket<T, _T> BasicSocket<T, _T>::create(WIN_SOCKET _socket, sockaddr_in _addr)
+    {
+        return BasicSocket<T, _T>(_socket, _addr);
+    }
+
+
+    template<IsBaseIp T, Protocol _T>
     BasicSocket<T, _T>::BasicSocket(const BasicSocket<T, _T> &&_bs) noexcept
         : m_socket(std::move(_bs.m_socket)), m_addr(_bs.m_addr)
     {

@@ -1,6 +1,7 @@
-#include <expected>
+#include <ws2tcpip.h>
 
 #include "M3L/Network/CSocket.hpp"
+#include "Tool/Expected.hpp"
 
 namespace m3l::net::c
 {
@@ -21,12 +22,12 @@ namespace m3l::net::c
         int err = 0;
 
         addr.sin_family = T::familly;
-        addr.sin_addr.s_addr = inet_addr(_ip.str().c_str());
+        inet_pton(T::familly, _ip.str().c_str(), &(addr.sin_addr.s_addr));
         addr.sin_port = htons(_port);
-        err = ::bind(_socket, &addr, sizeof(sockaddr_in));
+        err = ::bind(_socket, reinterpret_cast<const sockaddr *>(&addr), sizeof(sockaddr_in));
 
         if (err == 0)
-            return extstd::Expected(addr);
-        return extstd::Expected(err);
+            return extstd::Expected<sockaddr_in, int>(addr);
+        return extstd::Expected<sockaddr_in, int>(err);
     }
 }

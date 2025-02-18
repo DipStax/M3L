@@ -17,13 +17,13 @@ namespace extstd
     template<class T, class _T>
     T Expected<T, _T>::result()
     {
-        return std::get<T>();
+        return std::get<T>(m_data);
     }
 
     template<class T, class _T>
     _T Expected<T, _T>::error()
     {
-        return std::get<_T>();
+        return std::get<_T>(m_data);
     }
 
     template<class T, class _T>
