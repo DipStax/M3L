@@ -271,7 +271,7 @@ template<class T>
 concept NumericType = std::is_arithmetic<T>::value;
 
 template<class T>
-concept IsUnsigned = std::unsigned_integral<T>;
+concept IsUInt = std::unsigned_integral<T>;
 
 template<class T>
 concept IsSigned = std::signed_integral<T>;
