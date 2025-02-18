@@ -20,21 +20,22 @@ void server(bool& _listening, std::string _local_ip)
 {
     TcpAcceptorV4 acceptor = TcpAcceptorV4{ m3l::net::Ip<m3l::net::ip::v4>(_local_ip), PORT };
 
-    acceptor.listen();
+    acceptor.listen(5);
     if (!acceptor.is_open()) {
         std::cout << "Acceptor not open on server" << std::endl;
         return;
     }
     std::cout << "Server listening" << std::endl;
-    _listening = true;
     const uint8_t data[] = { 115, 101, 110, 100, 0 };
-
+    
+    _listening = true;
     TcpSocketV4 socket = TcpSocketV4{ std::move(acceptor.accept()) };
     std::cout << "Client connected to server (from server)" << std::endl;
     if (!socket.send(data, 5)) {
         std::cout << "Error during data sending" << std::endl;
         return;
     }
+    _listening = false;
     std::cout << "Server socket send package" << std::endl;
 }
 
@@ -59,7 +60,7 @@ int main()
         std::cout << "Client not connected to server" << std::endl;
         return 1;
     }
-    std::cout << "Client connected to server" << std::endl;
+    std::cout << "Client connected to server (from client)" << std::endl;
 
     std::array<uint8_t, 5> data = client.receive<5>();
     std::cout << "Received package: '";

@@ -23,6 +23,7 @@ namespace m3l::net
         }
         this->m_addr = error.result();
         this->m_addr.sin_port = this->retreive_port();
+        std::cout << "Binded acceptor" << std::endl;
         return true;
     }
 
@@ -31,6 +32,7 @@ namespace m3l::net
     {
         if (this->m_addr.sin_port == 0)
             return false;
+        std::cout << "Socket listening with max " << _max << std::endl;
         return ::listen(this->m_socket, _max) == 0;
     }
 
@@ -40,7 +42,7 @@ namespace m3l::net
         sockaddr_in addr{};
         int len = sizeof(sockaddr_in);
         WIN_SOCKET socket = ::accept(this->m_socket, reinterpret_cast<sockaddr *>(&addr), &len);
-
+        std::cout << "Accepted socket connection" << std::endl;
         return BasicSocket<T, _T>::create(socket, addr);
     }
 }

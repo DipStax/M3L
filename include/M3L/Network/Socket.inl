@@ -1,3 +1,5 @@
+#include <ws2tcpip.h>
+
 #include "M3L/Network/Socket.hpp"
 
 namespace m3l::net
@@ -46,7 +48,7 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     Socket<T, _T>::Socket(const Ip<T> &_ip, uint32_t _port)
     {
-        if (connect(_ip, _port)) {
+        if (!connect(_ip, _port)) {
             throw;
         }
     }
@@ -66,6 +68,9 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     bool Socket<T, _T>::connect(const Ip<T>& _ip, uint32_t _port)
     {
-        return false;
+        this->m_addr.sin_family = T::familly;
+        inet_pton(T::familly, _ip.str().c_str(), &(this->m_addr.sin_addr.s_addr));
+        this->m_addr.sin_port = htons(_port);
+        return ::connect(this->m_socket, reinterpret_cast<const sockaddr*>(&(this->m_addr)), sizeof(sockaddr_in)) == 0;
     }
 }
