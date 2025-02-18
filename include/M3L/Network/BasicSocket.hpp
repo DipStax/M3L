@@ -21,7 +21,7 @@ namespace m3l::net
             static BasicSocket<T, _T> create(WIN_SOCKET _socket, sockaddr_in _addr);
 
         protected:
-            BasicSocket() = default;
+            BasicSocket();
             BasicSocket(const BasicSocket<T, _T> &&_bs) noexcept;
             BasicSocket(WIN_SOCKET _socket, sockaddr_in _addr);
 

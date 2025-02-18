@@ -20,19 +20,20 @@ void server(bool& _listening, std::string _local_ip)
 {
     TcpAcceptorV4 acceptor = TcpAcceptorV4{ m3l::net::Ip<m3l::net::ip::v4>(_local_ip), PORT };
 
+    acceptor.listen();
     if (!acceptor.is_open()) {
-        std::cout << "Client not connected to server" << std::endl;
+        std::cout << "Acceptor not open on server" << std::endl;
         return;
     }
-    acceptor.listen();
     std::cout << "Server listening" << std::endl;
     _listening = true;
     const uint8_t data[] = { 115, 101, 110, 100, 0 };
 
     TcpSocketV4 socket = TcpSocketV4{ std::move(acceptor.accept()) };
     std::cout << "Client connected to server (from server)" << std::endl;
-    if (socket.send(data, 5)) {
+    if (!socket.send(data, 5)) {
         std::cout << "Error during data sending" << std::endl;
+        return;
     }
     std::cout << "Server socket send package" << std::endl;
 }

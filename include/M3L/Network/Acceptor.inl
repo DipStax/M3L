@@ -1,10 +1,12 @@
+#include <iostream>
+
 #include "M3L/Network/Acceptor.hpp"
 
 namespace m3l::net
 {
     template<IsBaseIp T, Protocol _T>
     Acceptor<T, _T>::Acceptor(Ip<T> _ip, uint32_t _port)
-        : Acceptor<T, _T>()
+        : BasicSocket<T, _T>()
     {
         bind(_ip, _port);
     }
@@ -12,10 +14,13 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     bool Acceptor<T, _T>::bind(Ip<T> _ip, uint32_t _port)
     {
+        std::cout << "Binding Acceptor to " << _ip << ":" << _port << std::endl;
         extstd::Expected<sockaddr_in, int> error = c::Socket::bind<Ip<T>>(this->m_socket, _ip, _port);
 
-        if (error)
+        if (error) {
+            std::cout << "Bind error: " << error.error() << " => " << WSAGetLastError() << std::endl;
             return false;
+        }
         this->m_addr = error.result();
         this->m_addr.sin_port = this->retreive_port();
         return true;

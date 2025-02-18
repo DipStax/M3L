@@ -16,7 +16,7 @@ namespace m3l::net
         {
             std::array<uint8_t, _T> data;
 
-            if (recvfrom(this->m_socket, data.data(), _T, 0, reinterpret_cast<sockaddr *>(this->m_addr), sizeof(sockaddr_in)) == SOCKET_ERROR) {
+            if (recvfrom(this->m_socket, data.data(), _T, 0, reinterpret_cast<sockaddr *>(&(this->m_addr)), sizeof(sockaddr_in)) == SOCKET_ERROR) {
                 // throw exception
             }
             return data;
@@ -32,10 +32,12 @@ namespace m3l::net
         template<size_t _T>
         std::array<uint8_t, _T> Socket<T, Protocol::TCP>::receive(RecvStrat _strat)
         {
-            std::array<uint8_t, _T> data;
+            std::array<uint8_t, _T> data{};
 
             if (recv(this->m_socket, reinterpret_cast<char *>(data.data()), _T, _strat) == SOCKET_ERROR) {
                 // throw exception
+                std::cout << "error: " << WSAGetLastError() << std::endl;
+                throw;
             }
             return data;
         }

@@ -11,9 +11,7 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     bool BasicSocket<T, _T>::is_open() const
     {
-        char buffer;
-
-        return !(recv(m_socket, &buffer, 1, MSG_PEEK) == SOCKET_ERROR && WSAGetLastError() != WSAEWOULDBLOCK);
+        return m_socket != SOCKET_ERROR;
     }
 
     template<IsBaseIp T, Protocol _T>
@@ -32,6 +30,12 @@ namespace m3l::net
         return BasicSocket<T, _T>(_socket, _addr);
     }
 
+    template<IsBaseIp T, Protocol _T>
+    BasicSocket<T, _T>::BasicSocket()
+    {
+        m_socket = c::Socket::create<T, _T>();
+        // verify protocol and stuff...
+    }
 
     template<IsBaseIp T, Protocol _T>
     BasicSocket<T, _T>::BasicSocket(const BasicSocket<T, _T> &&_bs) noexcept
@@ -49,9 +53,6 @@ namespace m3l::net
     template<IsBaseIp T, Protocol _T>
     int BasicSocket<T, _T>::retreive_port() const
     {
-        if (!is_open()) {
-            // throw
-        }
         if (m_addr.sin_port == 0) {
             // retreive port
         }

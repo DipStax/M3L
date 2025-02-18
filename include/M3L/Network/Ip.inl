@@ -55,7 +55,18 @@ namespace m3l::net
     template<IsBaseIpFormat T>
     std::string Ip<T>::str() const
     {
-        // todo formatings
-        return {};
+        std::string format{};
+
+        for (uint8_t it = 0; it < T::size; it++)
+            format += std::to_string(static_cast<uint8_t>((m_raw >> (it * 8)) & 0xff)) + ".";
+        format.pop_back();
+        return format;
+    }
+
+    template<IsBaseIpFormat T>
+    std::ostream &operator<<(std::ostream &_os, const Ip<T> &_ip)
+    {
+        _os << _ip.str();
+        return _os;
     }
 }

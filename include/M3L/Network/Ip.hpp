@@ -47,6 +47,9 @@ namespace m3l::net
             [[nodiscard]] constexpr RawContainer raw() const;
             [[nodiscard]] std::string str() const;
 
+            template<IsBaseIpFormat _T>
+            friend std::ostream &operator<<(std::ostream &_os, const Ip<_T> &_ip);
+
         private:
             T::Container m_raw = 0;
     };
