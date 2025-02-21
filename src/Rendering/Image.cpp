@@ -5,12 +5,6 @@
 
 namespace m3l
 {
-    Image::~Image()
-    {
-        if (m_bmp != NULL)
-            DeleteObject(m_bmp);
-    }
-
     void Image::load(const std::string &_path)
     {
         using facFn = void (Image::*)(const std::string&);
@@ -31,8 +25,6 @@ namespace m3l
         size_t size = _size.x * _size.y * (_bpp / 8);
 
         m_bpp = _bpp;
-        if (m_bmp != NULL)
-            DeleteObject(m_bmp);
         m_pxl.resize(size);
         for (size_t it = 0; it < size; it++)
             m_pxl[it] = _data[it];
@@ -52,14 +44,15 @@ namespace m3l
 
     void Image::facBmp(const std::string &_path)
     {
+        HBITMAP pbmp;
         BITMAP bmp;
         BITMAPINFO bmpInfo;
         HDC hdc;
 
-        m_bmp = (HBITMAP)LoadImageA(NULL, _path.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-        GetObject(m_bmp, sizeof(BITMAP), &bmp);
+        pbmp = (HBITMAP)LoadImageA(NULL, _path.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+        GetObject(pbmp, sizeof(BITMAP), &bmp);
         hdc = CreateCompatibleDC(NULL);
-        SelectObject(hdc, m_bmp);
+        SelectObject(hdc, pbmp);
         ZeroMemory(&bmpInfo, sizeof(BITMAPINFO));
         bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
         bmpInfo.bmiHeader.biWidth = bmp.bmWidth;
@@ -70,7 +63,8 @@ namespace m3l
         m_size = { static_cast<uint32_t>(bmp.bmWidth), static_cast<uint32_t>(bmp.bmHeight) };
         m_bpp = bmp.bmBitsPixel;
         m_pxl.resize(m_size.x * m_size.y * m_bpp); // correct calculatation of bpp (32)
-        GetDIBits(hdc, m_bmp, 0, bmp.bmHeight, m_pxl.data(), &bmpInfo, DIB_RGB_COLORS);
+        GetDIBits(hdc, pbmp, 0, bmp.bmHeight, m_pxl.data(), &bmpInfo, DIB_RGB_COLORS);
+        DeleteObject(pbmp);
         DeleteDC(hdc);
     }
 }

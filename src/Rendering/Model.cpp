@@ -33,11 +33,12 @@ namespace m3l
                 throw std::runtime_error("[Model](" + _path + "): Unknow flag: '" + line + "'");
             }
         }
+        // add polyTri resolution
     }
 
-    void Model::setTexture(Texture _txtr)
+    void Model::setTexture(Texture &_txtr)
     {
-        m_txtr = _txtr;
+        m_txtr = &_txtr;
     }
 
     void Model::draw(RenderTarget3D &_target, const Texture* _txtr) const
@@ -45,7 +46,7 @@ namespace m3l
         std::ignore = _txtr;
 
         for (const auto& _f : m_f)
-            _target.draw(_f.data(), _f.size(), &m_txtr);
+            _target.draw(_f.data(), _f.size(), m_txtr);
     }
 
     void Model::Init()

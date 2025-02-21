@@ -12,61 +12,50 @@ namespace m3l
             DeleteObject(m_dib);
     }
 
-    void RenderTarget2D::setBpp(uint8_t _bpp)
-    {
-        m_bpp = _bpp;
-    }
-
     uint8_t RenderTarget2D::getBpp() const
     {
         return m_bpp;
     }
 
-    void RenderTarget2D::draw(const IDrawable2D & _elem, const Texture *_txtr)
+    void RenderTarget2D::draw(const IDrawable2D & _elem, RenderState2D _state)
     {
-        _elem.draw(*this, _txtr);
+        _elem.draw(*this, _state);
     }
 
-    void RenderTarget2D::draw(const Vertex2D *_vtx, size_t _size, const Texture * _txtr)
+    void RenderTarget2D::draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type, RenderState2D _state)
     {
-        Point2<int32_t> min;
-        Point2<int32_t> max;
+        std::vector<Vertex2D> cache(_vtx, _vtx + _size);
 
-        if (_size > 3) {
-            for (const auto &_tri : polyTri(_vtx, _size))
-                draw(_tri.data(), 3, _txtr);
-        } else {
-            // caluclate minimal range of the drawing on y axes
-            int32_t ystart = static_cast<int32_t>(std::max(std::min({ _vtx[0].pos.y, _vtx[1].pos.y, _vtx[2].pos.y }), 0.f));
-            int32_t yend = static_cast<int32_t>(std::min(std::max({ _vtx[0].pos.y, _vtx[1].pos.y, _vtx[2].pos.y }), static_cast<float>(getSize().y)));
+        for (Vertex2D &_vertex : cache)
+            _vertex.pos = _state.transfo * _vertex.pos;
 
-            for (; ystart < yend; ystart++)
-                drawTriangle(_vtx, ystart, triRange(_vtx, ystart), _txtr);
-        }
-    }
+        switch (_type) {
+            case VertexArray::Type::Point:
+                for (size_t it = 0; it < _size; it++)
+                    setPixel(cache[it].pos.as<uint32_t>(), cache[it].clr);
+                break;
+            case VertexArray::Type::Lines:
+            case VertexArray::Type::LineStrip:
+                for (size_t it = 1; it < _size; it++)
+                    drawLine(cache[it - 1], cache[it]);
+                if (_type == VertexArray::Type::LineStrip)
+                    drawLine(cache[_size - 1], cache[0]);
+                break;
+            case VertexArray::Type::Triangle:
+            case VertexArray::Type::TriangleStrip:
+                const size_t delta = (_type == VertexArray::Type::Triangle) ? 3 : 2;
 
-    void RenderTarget2D::draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type)
-    {
-        if (_type == VertexArray::Type::Point) {
-            for (size_t it = 0; it < _size; it++)
-                setPixel(_vtx[it].pos.as<uint32_t>(), _vtx[it].clr);
-        } else if (_type == VertexArray::Type::Lines || _type == VertexArray::Type::LineStrip) {
-            for (size_t it = 1; it < _size; it++)
-                drawLine(_vtx[it - 1], _vtx[it]);
-            if (_type == VertexArray::Type::LineStrip)
-                drawLine(_vtx[_size - 1], _vtx[0]);
-        } else if (_type == VertexArray::Type::Polygone) {
-            if (_size > 3) {
-                for (const auto &_tri : polyTri(_vtx, _size))
-                    draw(_tri.data(), 3, _type);
-            } else {
-                // caluclate minimal range of the drawing on y axes
-                int32_t ystart = static_cast<int32_t>(std::max(std::min({ _vtx[0].pos.y, _vtx[1].pos.y, _vtx[2].pos.y }), 0.f));
-                int32_t yend = static_cast<int32_t>(std::min(std::max({ _vtx[0].pos.y, _vtx[1].pos.y, _vtx[2].pos.y }), static_cast<float>(getSize().y)));
+                for (size_t it = 0; it < _size - delta; it += delta) {
+                    // caluclate minimal range of the drawing on y axes
+                    Point2<uint32_t> pt = getSize();
 
-                for (; ystart < yend; ystart++)
-                    drawTriangle(_vtx, ystart, triRange(_vtx, ystart));
-            }
+                    int32_t ystart = static_cast<int32_t>(std::max(std::min({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), 0.f));
+                    int32_t yend = static_cast<int32_t>(std::min(std::max({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), static_cast<float>(getSize().y)));
+
+                    for (; ystart < yend; ystart++)
+                        drawTriangle(cache.data() + it, ystart, triRange(cache.data() + it, ystart), _state.texture);
+                }
+                break;
         }
     }
 
@@ -80,7 +69,7 @@ namespace m3l
         bmi.bmiHeader.biWidth = _x;
         bmi.bmiHeader.biHeight = -static_cast<int32_t>(_y);
         bmi.bmiHeader.biPlanes = 1;
-        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biBitCount = m_bpp;
         bmi.bmiHeader.biCompression = BI_RGB;
         if (m_dib)
             DeleteObject(m_dib);

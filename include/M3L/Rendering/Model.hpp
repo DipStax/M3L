@@ -20,7 +20,8 @@ namespace m3l
 
             void load(const std::string &_path);
 
-            void setTexture(Texture _txtr);
+            void setTexture(Texture &_txtr);
+            void displayEdge(bool _enable);
 
         protected:
             void draw(RenderTarget3D &_target, const Texture *_txtr) const;
@@ -46,6 +47,6 @@ namespace m3l
             std::vector<m3l::Vector3<float>> m_vp;
             std::vector<std::vector<Vertex3D>> m_f;
 
-            Texture m_txtr;
+            Texture *m_txtr;
     };
 }

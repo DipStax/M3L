@@ -3,10 +3,10 @@
 namespace m3l
 {
     BaseRenderWindow::BaseRenderWindow(uint32_t _x, uint32_t _y, const std::string &_title)
-        : Window(_x, _y, _title)
+        : Window(_x, _y, _title), m_size({ _x, _y })
     {
         create(m_size.x, m_size.y);
-        getCamera().setFov(110.f).setRange(0.1f, 100.f).setSize(static_cast<float>(m_size.x), static_cast<float>(m_size.y)).move({ 0, 0, -10 });
+        m_cam.setFov(110.f).setRange(0.1f, 100.f).setSize(static_cast<float>(m_size.x), static_cast<float>(m_size.y)).move({ 0, 0, -10 });
     }
 
     const Point2<uint32_t> &BaseRenderWindow::getSize() const

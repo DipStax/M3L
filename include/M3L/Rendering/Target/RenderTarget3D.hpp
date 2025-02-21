@@ -33,12 +33,13 @@ namespace m3l
 
             [[nodiscard]] const uint8_t *getData() const;
 
+            Camera m_cam;
+
         private:
             void drawTriangle(const Vertex3D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture * _txtr);
 
             void setPixel(const Point2<uint32_t> &_pos, Color _clr, float _depth);
 
-            Camera m_cam;
             HBITMAP m_dib;
             std::vector<float> m_depth;
             uint8_t *m_data = nullptr;

@@ -53,13 +53,9 @@ namespace m3l
         m_pos.clear();
     }
 
-    void VertexArray::draw(RenderTarget2D &_target, const Texture *_txtr) const
+    void VertexArray::draw(RenderTarget2D &_target, RenderState2D _state) const
     {
-        if (!m_pos.empty()) {
-            if (_txtr)
-                _target.draw(m_pos.data(), m_pos.size(), _txtr);
-            else
-                _target.draw(m_pos.data(), m_pos.size(), m_type);
-        }
+        if (!m_pos.empty())
+            _target.draw(m_pos.data(), m_pos.size(), m_type, _state);
     }
 }

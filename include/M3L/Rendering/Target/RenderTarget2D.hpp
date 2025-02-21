@@ -10,14 +10,12 @@ namespace m3l
         public:
             virtual ~RenderTarget2D();
 
-            void setBpp(uint8_t _bpp);
             [[nodiscard]] uint8_t getBpp() const;
 
             [[nodiscard]] virtual const Point2<uint32_t> &getSize() const = 0;
 
-            void draw(const IDrawable2D &_elem, const Texture *_txtr = nullptr);
-            void draw(const Vertex2D *_vtx, size_t _size, const Texture *_txtr);
-            void draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type);
+            void draw(const IDrawable2D &_elem, RenderState2D _state = RenderState2D());
+            void draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type, RenderState2D _state = RenderState2D());
 
         protected:
             RenderTarget2D() = default;
