@@ -34,13 +34,12 @@ namespace m3l
         _target.draw(m_vertex.data(), m_vertex.size(), VertexArray::Type::TriangleStrip, _state);
     }
 
-    // need to check how to handle correctly rect build with Transform
     void Sprite::buildVertex()
     {
         m_vertex.clear();
-        m_vertex.append({ m_rect.pos, { 0, 0 } });
-        m_vertex.append({ { m_rect.pos.x + m_rect.size.x, m_rect.pos.y }, { m_rect.size.x, 0 } });
-        m_vertex.append({ m_rect.pos + m_rect.size, m_rect.size });
-        m_vertex.append({ { m_rect.pos.x, m_rect.pos.y + m_rect.size.y }, { 0, m_rect.size.y } });
+        m_vertex.append({ { 0, 0 }, m_rect.pos });
+        m_vertex.append({ { m_rect.size.x, 0 }, { m_rect.pos.x + m_rect.size.x, m_rect.pos.y }  });
+        m_vertex.append({ { 0, m_rect.size.y }, { m_rect.pos.x, m_rect.pos.y + m_rect.size.y } });
+        m_vertex.append({ m_rect.size, m_rect.pos + m_rect.size });
     }
 }

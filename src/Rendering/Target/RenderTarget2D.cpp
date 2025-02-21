@@ -43,12 +43,10 @@ namespace m3l
                 break;
             case VertexArray::Type::Triangle:
             case VertexArray::Type::TriangleStrip:
-                const size_t delta = (_type == VertexArray::Type::Triangle) ? 3 : 2;
+                const size_t delta = (_type == VertexArray::Type::Triangle) ? 3 : 1;
 
-                for (size_t it = 0; it < _size - delta; it += delta) {
+                for (size_t it = 0; it + 3 <= _size; it += delta) {
                     // caluclate minimal range of the drawing on y axes
-                    Point2<uint32_t> pt = getSize();
-
                     int32_t ystart = static_cast<int32_t>(std::max(std::min({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), 0.f));
                     int32_t yend = static_cast<int32_t>(std::min(std::max({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), static_cast<float>(getSize().y)));
 
@@ -62,18 +60,17 @@ namespace m3l
     void RenderTarget2D::create(uint32_t _x, uint32_t _y, uint8_t _bpp)
     {
         HDC hdc = GetDC(NULL);
-        BITMAPINFO bmi;
 
         m_bpp = _bpp;
-        bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-        bmi.bmiHeader.biWidth = _x;
-        bmi.bmiHeader.biHeight = -static_cast<int32_t>(_y);
-        bmi.bmiHeader.biPlanes = 1;
-        bmi.bmiHeader.biBitCount = m_bpp;
-        bmi.bmiHeader.biCompression = BI_RGB;
+        m_bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        m_bmi.bmiHeader.biWidth = static_cast<int32_t>(_x);
+        m_bmi.bmiHeader.biHeight = -static_cast<int32_t>(_y);
+        m_bmi.bmiHeader.biPlanes = 1;
+        m_bmi.bmiHeader.biBitCount = m_bpp;
+        m_bmi.bmiHeader.biCompression = BI_RGB;
         if (m_dib)
             DeleteObject(m_dib);
-        m_dib = CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, reinterpret_cast<void **>(&m_data), NULL, 0);
+        m_dib = CreateDIBSection(hdc, &m_bmi, DIB_RGB_COLORS, reinterpret_cast<void **>(&m_data), NULL, 0);
         ReleaseDC(NULL, hdc);
     }
 
