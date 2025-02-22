@@ -24,11 +24,12 @@ int main()
     vertex.append({ { 200, 250 }, { 0, 0 }, green });
     vertex.append({ { 250, 200 }, { 0, 0 }, blue });
 
-    m3l::VertexArray vertex2(m3l::VertexArray::Type::Lines);
-    vertex2.append({ { 300, 200 }, { 0, 0 }, blue });
+    m3l::VertexArray vertex2(m3l::VertexArray::Type::LineStrip);
     vertex2.append({ { 350, 200 }, { 0, 0 }, blue });
-
-
+    vertex2.append({ { 300, 200 }, { 0, 0 }, blue });
+    vertex2.append({ { 350, 250 }, { 0, 0 }, blue });
+    vertex2.append({ { 350, 225 }, { 0, 0 }, blue });
+    vertex2.append({ { 375, 200 }, { 0, 0 }, blue });
 
     while (window.isOpen()) {
         while (window.pollEvent(event)) {}

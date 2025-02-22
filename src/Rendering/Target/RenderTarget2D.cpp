@@ -36,7 +36,6 @@ namespace m3l
                 break;
             case VertexArray::Type::Lines:
             case VertexArray::Type::LineStrip:
-                // handle color
                 for (size_t it = 1; it < _size; it++)
                     drawLine(cache[it - 1], cache[it]);
                 if (_type == VertexArray::Type::LineStrip)
@@ -92,24 +91,30 @@ namespace m3l
 
     void RenderTarget2D::drawLine(const Vertex2D &_start, const Vertex2D &_end)
     {
-        Point2<uint32_t> derivate = (_end.pos - _start.pos).as<uint32_t>();
-        uint32_t endx = static_cast<uint32_t>(_end.pos.x);
-        uint32_t endy = static_cast<uint32_t>(_end.pos.y);
+        Point2<uint32_t> start_pos = _start.pos.as<uint32_t>();
+        Point2<uint32_t> end_pos = _end.pos.as<uint32_t>();
+
+        if (start_pos.x > end_pos.x)
+            std::swap(start_pos, end_pos);
+        Point2<uint32_t> derivate = (end_pos - start_pos).as<uint32_t>();
         uint32_t delta = 2 * derivate.y - derivate.x;
 
+        // missing coloring
         if (derivate.y == 0) {
-            for (Point2<uint32_t> pos = start_pos; pos.x <= endx; pos.x++)
+            for (Point2<uint32_t> pos = start_pos; pos.x <= end_pos.x; pos.x++)
                 setPixel(pos, { 255, 0, 0, 255 });
             return;
         } else if (derivate.x == 0) {
-            for (Point2<uint32_t> pos = start_pos; pos.y <= endy; pos.y++)
+            if (start_pos.y > end_pos.y)
+                std::swap(start_pos, end_pos);
+            for (Point2<uint32_t> pos = start_pos; pos.y <= end_pos.y; pos.y++)
                 setPixel(pos, { 255, 0, 0, 255 });
             return;
         }
-        for (Point2<uint32_t> pos = start_pos; pos.x < endx; pos.x++) {
+        for (Point2<uint32_t> pos = start_pos; pos.x < end_pos.x; pos.x++) {
             setPixel(pos, { 255, 0, 0, 255 });
             if (delta > 0) {
-                pos.y++;
+                pos.y += start_pos.y < end_pos.y ? 1 : -1;
                 delta -= 2 * derivate.x;
             }
             delta += 2 * derivate.y;
