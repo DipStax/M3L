@@ -30,7 +30,6 @@ namespace m3l
             void drawLine(const Vertex2D &_start, const Vertex2D &_end);
 
             void drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture *_txtr);
-            void drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t>& _range);
 
             void setPixel(const Point2<uint32_t> &_pos, Color _clr);
 

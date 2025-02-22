@@ -20,6 +20,7 @@ namespace m3l
             };
 
             VertexArray(size_t _n = 0);
+            VertexArray(Type _type, size_t _n = 0);
             ~VertexArray() = default;
 
             void setType(Type _type);

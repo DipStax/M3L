@@ -36,6 +36,7 @@ namespace m3l
                 break;
             case VertexArray::Type::Lines:
             case VertexArray::Type::LineStrip:
+                // handle color
                 for (size_t it = 1; it < _size; it++)
                     drawLine(cache[it - 1], cache[it]);
                 if (_type == VertexArray::Type::LineStrip)
@@ -50,6 +51,7 @@ namespace m3l
                     int32_t ystart = static_cast<int32_t>(std::max(std::min({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), 0.f));
                     int32_t yend = static_cast<int32_t>(std::min(std::max({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), static_cast<float>(getSize().y)));
 
+                    // handle color
                     for (; ystart < yend; ystart++)
                         drawTriangle(cache.data() + it, ystart, triRange(cache.data() + it, ystart), _state.texture);
                 }
@@ -92,10 +94,20 @@ namespace m3l
     {
         Point2<uint32_t> derivate = (_end.pos - _start.pos).as<uint32_t>();
         uint32_t endx = static_cast<uint32_t>(_end.pos.x);
+        uint32_t endy = static_cast<uint32_t>(_end.pos.y);
         uint32_t delta = 2 * derivate.y - derivate.x;
 
-        for (Point2<uint32_t> pos = _start.pos.as<uint32_t>(); pos.x < endx; pos.x++) {
-            setPixel(pos, { 0, 0, 0, 255 });
+        if (derivate.y == 0) {
+            for (Point2<uint32_t> pos = start_pos; pos.x <= endx; pos.x++)
+                setPixel(pos, { 255, 0, 0, 255 });
+            return;
+        } else if (derivate.x == 0) {
+            for (Point2<uint32_t> pos = start_pos; pos.y <= endy; pos.y++)
+                setPixel(pos, { 255, 0, 0, 255 });
+            return;
+        }
+        for (Point2<uint32_t> pos = start_pos; pos.x < endx; pos.x++) {
+            setPixel(pos, { 255, 0, 0, 255 });
             if (delta > 0) {
                 pos.y++;
                 delta -= 2 * derivate.x;
@@ -106,38 +118,30 @@ namespace m3l
 
     void RenderTarget2D::drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture * _txtr)
     {
-        Point2<float> pos;
+        using ColorProcess = Color (*)(const Vertex2D *, float, float, float, const Texture *);
+
         float total_area = area(_vtx[0].pos, _vtx[1].pos, _vtx[2].pos);
         float ratio1 = 0;
         float ratio2 = 0;
         float ratio3 = 0;
         Point2<uint32_t> size = getSize() - 1;
+        ColorProcess getColor;
 
-        // caluclate minimal range of the drawing on x axes
-        float xstart = static_cast<float>(std::max(_range.x, 0U));
-        float xend = static_cast<float>(std::min(_range.y, size.x));
+        if (_txtr == nullptr) {
+            getColor = [] (const Vertex2D *_vtx, float _ratio1, float _ratio2, float _ratio3, const Texture * _txtr) {
+                std::ignore = _txtr;
 
-        for (Point2<float> px = { xstart, static_cast<float>(_line) }; px.x <= xend; px.x++) {
-            // calculating mapping of the texture
-            ratio1 = area(_vtx[2].pos, _vtx[0].pos, px) / total_area;
-            ratio2 = area(_vtx[0].pos, _vtx[1].pos, px) / total_area;
-            ratio3 = 1 - ratio1 - ratio2;
-            pos = _vtx[1].txtrPos * ratio1 + _vtx[2].txtrPos * ratio2 + _vtx[0].txtrPos * ratio3;
-            // px position is assured by calculation the minimal range in x and y axes;
-            setPixel(px.as<uint32_t>(), _txtr->getPixel(pos.as<uint32_t>()));
+                return Color{ static_cast<uint8_t>(_vtx[1].clr.R * _ratio1 + _vtx[2].clr.R * _ratio2 + _vtx[0].clr.R * _ratio3),
+                    static_cast<uint8_t>(_vtx[1].clr.G * _ratio1 + _vtx[2].clr.G * _ratio2 + _vtx[0].clr.G * _ratio3),
+                    static_cast<uint8_t>(_vtx[1].clr.B * _ratio1 + _vtx[2].clr.B * _ratio2 + _vtx[0].clr.B * _ratio3),
+                    static_cast<uint8_t>(_vtx[1].clr.A * _ratio1 + _vtx[2].clr.A * _ratio2 + _vtx[0].clr.A * _ratio3) };
+            };
+        } else {
+            getColor = [](const Vertex2D* _vtx, float _ratio1, float _ratio2, float _ratio3, const Texture* _txtr) {
+                Point2<float> pos = _vtx[1].txtrPos * _ratio1 + _vtx[2].txtrPos * _ratio2 + _vtx[0].txtrPos * _ratio3;
+                return _txtr->getPixel(pos.as<uint32_t>());
+            };
         }
-    }
-
-    void RenderTarget2D::drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t> &_range)
-    {
-        Point2<float> pos;
-        float total_area = area(_vtx[0].pos, _vtx[1].pos, _vtx[2].pos);
-        float ratio1 = 0;
-        float ratio2 = 0;
-        float ratio3 = 0;
-        Color clr = { 0, 0, 0, 0 };
-        Point2<uint32_t> size = getSize() - 1;
-
         // caluclate minimal range of the drawing on x axes
         float xstart = static_cast<float>(std::max(_range.x, 0U));
         float xend = static_cast<float>(std::min(_range.y, size.x));
@@ -147,11 +151,7 @@ namespace m3l
             ratio1 = area(_vtx[2].pos, _vtx[0].pos, px) / total_area;
             ratio2 = area(_vtx[0].pos, _vtx[1].pos, px) / total_area;
             ratio3 = 1 - ratio1 - ratio2;
-            clr.R = _vtx[1].clr.R * ratio1 + _vtx[2].clr.R * ratio2 + _vtx[0].clr.R * ratio3;
-            clr.G = _vtx[1].clr.G * ratio1 + _vtx[2].clr.G * ratio2 + _vtx[0].clr.G * ratio3;
-            clr.B = _vtx[1].clr.B * ratio1 + _vtx[2].clr.B * ratio2 + _vtx[0].clr.B * ratio3;
-            clr.A = _vtx[1].clr.A * ratio1 + _vtx[2].clr.A * ratio2 + _vtx[0].clr.A * ratio3;
-            setPixel(px.as<uint32_t>(), clr);
+            setPixel(px.as<uint32_t>(), getColor(_vtx, ratio1, ratio2, ratio3, _txtr));
         }
     }
 

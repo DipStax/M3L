@@ -8,6 +8,11 @@ namespace m3l
     {
     }
 
+    VertexArray::VertexArray(Type _type, size_t _n)
+        : m_type(_type), m_pos(_n)
+    {
+    }
+
     void VertexArray::setType(Type _type)
     {
         m_type = _type;
