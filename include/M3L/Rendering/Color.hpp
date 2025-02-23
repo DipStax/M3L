@@ -16,6 +16,8 @@ namespace m3l
         uint8_t G = 0;
         uint8_t B = 0;
         uint8_t A = 255;
+
+        Color operator*(float &_ratio) const;
     };
 
     M3L_API std::ostream &operator<<(std::ostream &_os, const Color &_clr);

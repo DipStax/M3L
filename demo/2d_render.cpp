@@ -15,9 +15,9 @@ int main()
     sprite.setPosition(20.f, 50.f);
     //sprite.rotate(30);
 
-    m3l::Color red = { 255, 0, 0, 0 };
-    m3l::Color green = { 0, 255, 0, 0 };
-    m3l::Color blue = { 0, 0, 255, 0 };
+    m3l::Color red = { 255, 0, 0, 255 };
+    m3l::Color green = { 0, 255, 0, 255 };
+    m3l::Color blue = { 0, 0, 255, 255 };
     m3l::VertexArray vertex(m3l::VertexArray::Type::Triangle);
 
     vertex.append({ { 200, 200 }, { 0, 0 }, red });
@@ -25,10 +25,11 @@ int main()
     vertex.append({ { 250, 200 }, { 0, 0 }, blue });
 
     m3l::VertexArray vertex2(m3l::VertexArray::Type::LineStrip);
-    vertex2.append({ { 350, 200 }, { 0, 0 }, blue });
+
+    vertex2.append({ { 350, 200 }, { 0, 0 }, red });
     vertex2.append({ { 300, 200 }, { 0, 0 }, blue });
-    vertex2.append({ { 350, 250 }, { 0, 0 }, blue });
-    vertex2.append({ { 350, 225 }, { 0, 0 }, blue });
+    vertex2.append({ { 350, 250 }, { 0, 0 }, green });
+    vertex2.append({ { 350, 225 }, { 0, 0 }, red });
     vertex2.append({ { 375, 200 }, { 0, 0 }, blue });
 
     while (window.isOpen()) {

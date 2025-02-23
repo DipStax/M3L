@@ -91,33 +91,35 @@ namespace m3l
 
     void RenderTarget2D::drawLine(const Vertex2D &_start, const Vertex2D &_end)
     {
-        Point2<uint32_t> start_pos = _start.pos.as<uint32_t>();
-        Point2<uint32_t> end_pos = _end.pos.as<uint32_t>();
+        Vertex2D start = _start;
+        Vertex2D end = _end;
+        Color clr = _start.clr;
 
-        if (start_pos.x > end_pos.x)
-            std::swap(start_pos, end_pos);
-        Point2<uint32_t> derivate = (end_pos - start_pos).as<uint32_t>();
-        uint32_t delta = 2 * derivate.y - derivate.x;
+        if (start.pos.x > end.pos.x)
+            std::swap(start, end);
+        Point2<uint32_t> derivate = (end.pos - start.pos).as<uint32_t>();
 
         // missing coloring
-        if (derivate.y == 0) {
-            for (Point2<uint32_t> pos = start_pos; pos.x <= end_pos.x; pos.x++)
-                setPixel(pos, { 255, 0, 0, 255 });
-            return;
-        } else if (derivate.x == 0) {
-            if (start_pos.y > end_pos.y)
-                std::swap(start_pos, end_pos);
-            for (Point2<uint32_t> pos = start_pos; pos.y <= end_pos.y; pos.y++)
-                setPixel(pos, { 255, 0, 0, 255 });
-            return;
-        }
-        for (Point2<uint32_t> pos = start_pos; pos.x < end_pos.x; pos.x++) {
-            setPixel(pos, { 255, 0, 0, 255 });
-            if (delta > 0) {
-                pos.y += start_pos.y < end_pos.y ? 1 : -1;
-                delta -= 2 * derivate.x;
+        if (derivate.x == 0) {
+            if (start.pos.y > end.pos.y)
+                std::swap(start, end);
+            for (Point2<uint32_t> pos = start.pos.as<uint32_t>(); pos.y <= end.pos.y; pos.y++)
+                setPixel(pos, clr);
+        } else if (derivate.y == 0) {
+            for (Point2<uint32_t> pos = start.pos.as<uint32_t>(); pos.x <= end.pos.x; pos.x++)
+                setPixel(pos, clr);
+        } else {
+            const uint32_t ydelta = (start.pos.y < end.pos.y) ? 1 : -1;
+            uint32_t delta = 2 * derivate.y - derivate.x;
+
+            for (Point2<uint32_t> pos = start.pos.as<uint32_t>(); pos.x < end.pos.x; pos.x++) {
+                setPixel(pos, clr);
+                if (delta > 0) {
+                    pos.y += ydelta;
+                    delta -= 2 * derivate.x;
+                }
+                delta += 2 * derivate.y;
             }
-            delta += 2 * derivate.y;
         }
     }
 
