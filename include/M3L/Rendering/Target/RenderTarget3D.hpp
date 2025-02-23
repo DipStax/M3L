@@ -20,8 +20,8 @@ namespace m3l
 
             [[nodiscard]] virtual const Point2<uint32_t> &getSize() const = 0;
 
-            void draw(const IDrawable3D &_elem, const Texture *_txtr = nullptr);
-            void draw(const Vertex3D *_vtx, size_t _size, const Texture *_txtr);
+            void draw(const IDrawable3D &_elem, RenderState3D _state = RenderState3D());
+            void draw(const Vertex3D *_vtx, size_t _size, RenderState3D _state = RenderState3D());
 
         protected:
             RenderTarget3D() = default;

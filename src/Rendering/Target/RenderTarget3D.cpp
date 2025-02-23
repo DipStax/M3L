@@ -37,9 +37,9 @@ namespace m3l
         return m_bpp;
     }
 
-    void RenderTarget3D::draw(const IDrawable3D &_elem, const Texture *_txtr)
+    void RenderTarget3D::draw(const IDrawable3D &_elem, RenderState3D _state)
     {
-        _elem.draw(*this, _txtr);
+        _elem.draw(*this, _state);
     }
 
     void RenderTarget3D::create(uint32_t _x, uint32_t _y, const Camera &_cam, uint8_t _bpp)
@@ -85,10 +85,10 @@ namespace m3l
 
     // need strategy of Vertex link
     // need for size handling depending on strategy
-    void RenderTarget3D::draw(const Vertex3D *_vtx, size_t _size, const Texture *_txtr)
+    void RenderTarget3D::draw(const Vertex3D *_vtx, size_t _size, RenderState3D _state)
     {
         std::vector<Vertex3D> vtx(_vtx, _vtx + _size);
-        Point2<float> size = _txtr->getSize().as<float>();
+        Point2<float> size = _state.texture->getSize().as<float>();
 
         for (auto &_mvtx : vtx) {
             _mvtx.pos = m_cam.project(_mvtx.pos);
@@ -99,7 +99,7 @@ namespace m3l
         int32_t yend = static_cast<int32_t>(std::min(std::max({ vtx[0].pos.y, vtx[1].pos.y, vtx[2].pos.y }), static_cast<float>(getSize().y)));
 
         for (; ystart < yend; ystart++)
-            drawTriangle(vtx.data(), ystart, triRange(vtx.data(), ystart), _txtr);
+            drawTriangle(vtx.data(), ystart, triRange(vtx.data(), ystart), _state.texture);
     }
 
     void RenderTarget3D::drawTriangle(const Vertex3D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture *_txtr)

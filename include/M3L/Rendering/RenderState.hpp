@@ -15,8 +15,8 @@ namespace m3l
         Transform2D transfo{};
     };
 
-    // struct RenderState3D : BaseRenderState
-    // {
-    //     Transformable3D transfo;
-    // }
+    struct RenderState3D : BaseRenderState
+    {
+        // Transformable3D transfo;
+    };
 }
