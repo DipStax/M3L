@@ -1,12 +1,12 @@
 #pragma once
 
 #include "M3L/Rendering/Object3D.hpp"
-#include "M3L/Rendering/IDrawable3D.hpp"
+#include "M3L/Rendering/Target/RenderTarget3D.hpp"
 #include "M3L/Rendering/Transformable3D.hpp"
 
 namespace m3l
 {
-    class Model : public Transformable3D, public IDrawable3D
+    class M3L_API Model : public Transformable3D, public IDrawable3D
     {
         public:
             Model() = default;

@@ -83,27 +83,84 @@ namespace m3l
         return m_data;
     }
 
-    // need strategy of Vertex link
-    // need for size handling depending on strategy
-    void RenderTarget3D::draw(const Vertex3D *_vtx, size_t _size, RenderState3D _state)
+    void RenderTarget3D::draw(const Vertex3D *_vtx, size_t _size, VertexArray::Type _type, RenderState3D _state)
     {
-        std::vector<Vertex3D> vtx(_vtx, _vtx + _size);
-        Point2<float> size = _state.texture->getSize().as<float>();
+        std::vector<Vertex3D> cache(_vtx, _vtx + _size);
+        Point2<float> size{ 0, 0 };
 
-        for (auto &_mvtx : vtx) {
-            _mvtx.pos = m_cam.project(_mvtx.pos);
-            _mvtx.txtrPos = _mvtx.txtrPos * size;
+        if (_state.texture != nullptr)
+            size = _state.texture->getSize().as<float>();
+        for (Vertex3D &_vertex : cache) {
+            _vertex.pos = m_cam.project(_vertex.pos);
+            if (_state.texture != nullptr)
+                _vertex.txtrPos *= size; // certainly move it to Model and other IDrawable3D
         }
-        // caluclate minimal range of the drawing on y axes
-        int32_t ystart = static_cast<int32_t>(std::max(std::min({ vtx[0].pos.y, vtx[1].pos.y, vtx[2].pos.y }), 0.f));
-        int32_t yend = static_cast<int32_t>(std::min(std::max({ vtx[0].pos.y, vtx[1].pos.y, vtx[2].pos.y }), static_cast<float>(getSize().y)));
 
-        for (; ystart < yend; ystart++)
-            drawTriangle(vtx.data(), ystart, triRange(vtx.data(), ystart), _state.texture);
+        switch (_type) {
+            case VertexArray::Type::Point:
+                for (size_t it = 0; it < _size; it++)
+                    setPixel(cache[it].pos.as2<uint32_t>(), cache[it].clr, cache[it].pos.z);
+                break;
+            case VertexArray::Type::Lines:
+            case VertexArray::Type::LineStrip:
+                for (size_t it = 1; it < _size; it++)
+                    drawLine(cache[it - 1], cache[it]);
+                if (_type == VertexArray::Type::LineStrip)
+                    drawLine(cache[_size - 1], cache[0]);
+                break;
+            case VertexArray::Type::Triangle:
+            case VertexArray::Type::TriangleStrip:
+                const size_t delta = (_type == VertexArray::Type::Triangle) ? 3 : 1;
+                // caluclate minimal range of the drawing on y axes
+                for (size_t it = 0; it + 3 <= _size; it += delta) {
+                    int32_t ystart = static_cast<int32_t>(std::max(std::min({ cache[0].pos.y, cache[1].pos.y, cache[2].pos.y }), 0.f));
+                    int32_t yend = static_cast<int32_t>(std::min(std::max({ cache[0].pos.y, cache[1].pos.y, cache[2].pos.y }), static_cast<float>(getSize().y)));
+
+                    for (; ystart < yend; ystart++)
+                        drawTriangle(cache.data() + it, ystart, triRange(cache.data() + it, ystart), _state.texture);
+                }
+                break;
+        }
+    }
+
+    void RenderTarget3D::drawLine(const Vertex3D &_start, const Vertex3D &_end)
+    {
+        Vertex3D start = _start;
+        Vertex3D end = _end;
+        Color clr = _start.clr;
+
+        if (start.pos.x > end.pos.x)
+            std::swap(start, end);
+        Point2<uint32_t> derivate = (end.pos - start.pos).as2<uint32_t>();
+
+        // missing coloring
+        if (derivate.x == 0) {
+            if (start.pos.y > end.pos.y)
+                std::swap(start, end);
+            for (Point2<uint32_t> pos = start.pos.as2<uint32_t>(); pos.y <= end.pos.y; pos.y++)
+                setPixel(pos, clr, 0);
+        } else if (derivate.y == 0) {
+            for (Point2<uint32_t> pos = start.pos.as2<uint32_t>(); pos.x <= end.pos.x; pos.x++)
+                setPixel(pos, clr, 0);
+        } else {
+            const uint32_t ydelta = (start.pos.y < end.pos.y) ? 1 : -1;
+            uint32_t delta = 2 * derivate.y - derivate.x;
+
+            for (Point2<uint32_t> pos = start.pos.as2<uint32_t>(); pos.x < end.pos.x; pos.x++) {
+                setPixel(pos, clr, 0);
+                if (delta > 0) {
+                    pos.y += ydelta;
+                    delta -= 2 * derivate.x;
+                }
+                delta += 2 * derivate.y;
+            }
+        }
     }
 
     void RenderTarget3D::drawTriangle(const Vertex3D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture *_txtr)
     {
+        using ColorProcess = Color (*)(const Vertex3D *, float, float, float, const Texture *);
+
         Point2<float> vertex1 = _vtx[0].pos.as2();
         Point2<float> vertex2 = _vtx[1].pos.as2();
         Point2<float> vertex3 = _vtx[2].pos.as2();
@@ -120,6 +177,23 @@ namespace m3l
         float ratio3 = 0.f;
         float depth = 0.f;
         Point2<float> rpos = { 0.f, 0.f };
+        ColorProcess getColor;
+
+        if (_txtr == nullptr) {
+            getColor = [] (const Vertex3D *_vtx, float _ratio1, float _ratio2, float _ratio3, const Texture * _txtr) {
+                std::ignore = _txtr;
+
+                return Color{ static_cast<uint8_t>(_vtx[1].clr.R * _ratio1 + _vtx[2].clr.R * _ratio2 + _vtx[0].clr.R * _ratio3),
+                    static_cast<uint8_t>(_vtx[1].clr.G * _ratio1 + _vtx[2].clr.G * _ratio2 + _vtx[0].clr.G * _ratio3),
+                    static_cast<uint8_t>(_vtx[1].clr.B * _ratio1 + _vtx[2].clr.B * _ratio2 + _vtx[0].clr.B * _ratio3),
+                    static_cast<uint8_t>(_vtx[1].clr.A * _ratio1 + _vtx[2].clr.A * _ratio2 + _vtx[0].clr.A * _ratio3) };
+            };
+        } else {
+            getColor = [](const Vertex3D *_vtx, float _ratio1, float _ratio2, float _ratio3, const Texture* _txtr) {
+                Point2<float> pos = _vtx[1].txtrPos * _ratio1 + _vtx[2].txtrPos * _ratio2 + _vtx[0].txtrPos * _ratio3;
+                return _txtr->getPixel(pos.as<uint32_t>());
+            };
+        }
 
         for (Point2<float> pos = { xstart, static_cast<float>(_line) }; pos.x <= xend; pos.x++, depth_pos++) {
             // calculating mapping of the depth
@@ -127,12 +201,8 @@ namespace m3l
             ratio2 = area(vertex1, vertex2, pos) / total_area;
             ratio3 = 1 - ratio1 - ratio2;
             depth = _vtx[1].pos.z * ratio1 + _vtx[2].pos.z * ratio2 + _vtx[0].pos.z * ratio3;
-            // check the depth on the pixel
-            if (depth > m_depth[depth_pos]) {
-                // calculating mapping of the texture
-                rpos = _vtx[1].txtrPos * ratio1 + _vtx[2].txtrPos * ratio2 + _vtx[0].txtrPos * ratio3;
-                setPixel(pos.as<uint32_t>(), _txtr->getPixel(rpos.as<uint32_t>()), depth);
-            }
+            if (depth > m_depth[depth_pos])
+                setPixel(pos.as<uint32_t>(), getColor(_vtx, ratio1, ratio2, ratio3, _txtr), depth);
         }
     }
 
@@ -141,7 +211,9 @@ namespace m3l
         size_t pos = _pos.y * getSize().x + _pos.x;
         uint32_t clr = CLR(_clr);
 
-        m_depth[pos] = _depth;
-        std::memcpy(m_data + (_pos.y * getSize().x + _pos.x) * static_cast<uint32_t>(m_bpp / 8), &clr, sizeof(uint32_t));
+        if (0 <= pos && pos < m_depth.size()) {
+            m_depth[pos] = _depth;
+            std::memcpy(m_data + (_pos.y * getSize().x + _pos.x) * static_cast<uint32_t>(m_bpp / 8), &clr, sizeof(uint32_t));
+        }
     }
 }

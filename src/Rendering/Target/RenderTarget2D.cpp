@@ -50,7 +50,6 @@ namespace m3l
                     int32_t ystart = static_cast<int32_t>(std::max(std::min({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), 0.f));
                     int32_t yend = static_cast<int32_t>(std::min(std::max({ cache[it].pos.y, cache[it + 1].pos.y, cache[it + 2].pos.y }), static_cast<float>(getSize().y)));
 
-                    // handle color
                     for (; ystart < yend; ystart++)
                         drawTriangle(cache.data() + it, ystart, triRange(cache.data() + it, ystart), _state.texture);
                 }

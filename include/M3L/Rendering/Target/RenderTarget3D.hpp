@@ -21,7 +21,7 @@ namespace m3l
             [[nodiscard]] virtual const Point2<uint32_t> &getSize() const = 0;
 
             void draw(const IDrawable3D &_elem, RenderState3D _state = RenderState3D());
-            void draw(const Vertex3D *_vtx, size_t _size, RenderState3D _state = RenderState3D());
+            void draw(const Vertex3D *_vtx, size_t _size, VertexArray::Type _type, RenderState3D _state = RenderState3D());
 
         protected:
             RenderTarget3D() = default;
@@ -37,12 +37,13 @@ namespace m3l
 
         private:
             void drawTriangle(const Vertex3D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture * _txtr);
+            void drawLine(const Vertex3D &_start, const Vertex3D &_end);
 
             void setPixel(const Point2<uint32_t> &_pos, Color _clr, float _depth);
 
-            HBITMAP m_dib;
-            std::vector<float> m_depth;
+            HBITMAP m_dib = nullptr;
+            std::vector<float> m_depth{};
             uint8_t *m_data = nullptr;
-            uint8_t m_bpp;
+            uint8_t m_bpp = 0;
     };
 }

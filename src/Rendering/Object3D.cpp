@@ -36,17 +36,10 @@ namespace m3l
         // add polyTri resolution
     }
 
-    void Object3D::setTexture(Texture &_txtr)
-    {
-        m_txtr = &_txtr;
-    }
-
     void Object3D::draw(RenderTarget3D &_target, RenderState3D _state) const
     {
-        _state.texture = m_txtr;
-
         for (const auto& _f : m_f)
-            _target.draw(_f.data(), _f.size(), _state);
+            _target.draw(_f.data(), _f.size(), VertexArray::Type::Lines, _state);
     }
 
     void Object3D::Init()

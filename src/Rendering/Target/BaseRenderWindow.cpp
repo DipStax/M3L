@@ -50,9 +50,9 @@ namespace m3l
         for (size_t it = 0; it < size.x * size.y; it++) {
             // alpha is broken
             //if (CLR_GET_ALPHA(data2d[it]) == 0)
-            //    data[it] = data3d[it];
+            data[it] = data3d[it];
             //else
-            data[it] = data2d[it];
+            // data[it] = data2d[it];
         }
         SetDIBitsToDevice(_draw, 0, 0, size.x, size.y, 0, 0, 0, size.y, data.data(), &bmi, DIB_RGB_COLORS);
     }

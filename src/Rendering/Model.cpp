@@ -27,11 +27,11 @@ namespace m3l
     {
         if (!m_edge || m_withtxtr) {
             _state.texture = m_txtr;
-            _target.draw(m_obj, _state);
+            _target.draw(*m_obj, _state);
         }
         if (m_edge) {
             _state.texture = nullptr;
-            _target.draw(m_obj, _state);
+            _target.draw(*m_obj, _state);
         }
     }
 }
