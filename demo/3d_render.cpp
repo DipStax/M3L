@@ -16,7 +16,7 @@ int main()
 
     model.setTexture(texture);
     model.setObject(obj);
-    model.displayEdge(true);
+    model.displayEdge(true, true);
     while (window.isOpen()) {
         while (window.pollEvent(event)) {}
         window.clear(white);

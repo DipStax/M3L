@@ -39,7 +39,7 @@ namespace m3l
     void Object3D::draw(RenderTarget3D &_target, RenderState3D _state) const
     {
         for (const auto& _f : m_f)
-            _target.draw(_f.data(), _f.size(), VertexArray::Type::Lines, _state);
+            _target.draw(_f.data(), _f.size(), _state.vertexOnly ? VertexArray::Type::LineStrip : VertexArray::Type::Triangle, _state);
     }
 
     void Object3D::Init()

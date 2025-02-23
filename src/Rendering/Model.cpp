@@ -31,6 +31,7 @@ namespace m3l
         }
         if (m_edge) {
             _state.texture = nullptr;
+            _state.vertexOnly = true;
             _target.draw(*m_obj, _state);
         }
     }

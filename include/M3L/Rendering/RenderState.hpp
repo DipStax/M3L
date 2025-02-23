@@ -17,6 +17,7 @@ namespace m3l
 
     struct RenderState3D : BaseRenderState
     {
+        bool vertexOnly = false;
         // Transformable3D transfo;
     };
 }
