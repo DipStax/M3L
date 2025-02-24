@@ -7,7 +7,7 @@
 
 namespace m3l
 {
-    class M3L_API Camera
+    class M3L_API Camera :public Transformable3D
     {
         public:
             Camera();

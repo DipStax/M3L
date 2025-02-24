@@ -60,20 +60,25 @@ namespace m3l
         rotY.identity();
         rotZ.identity();
 
-        rotX[1][1] = std::cos(m_rot.x);
-        rotX[1][2] = -std::sin(m_rot.x);
-        rotX[2][1] = std::cos(m_rot.x);
-        rotX[2][2] = std::sin(m_rot.x);
+        if (m_rot.x != 0.f) {
+            rotX[1][1] = std::cos(m_rot.x);
+            rotX[1][2] = -std::sin(m_rot.x);
+            rotX[2][1] = std::cos(m_rot.x);
+            rotX[2][2] = std::sin(m_rot.x);
+        }
 
-        rotY[0][0] = std::cos(m_rot.y);
-        rotY[0][2] = std::sin(m_rot.y);
-        rotY[2][0] = -std::sin(m_rot.y);
-        rotY[2][2] = std::cos(m_rot.y);
-
-        rotZ[0][0] = std::cos(m_rot.z);
-        rotZ[0][1] = -std::sin(m_rot.z);
-        rotZ[1][0] = std::sin(m_rot.z);
-        rotZ[1][1] = std::cos(m_rot.z);
+        if (m_rot.y != 0.f) {
+            rotY[0][0] = std::cos(m_rot.y);
+            rotY[0][2] = std::sin(m_rot.y);
+            rotY[2][0] = -std::sin(m_rot.y);
+            rotY[2][2] = std::cos(m_rot.y);
+        }
+        if (m_rot.z != 0.f) {
+            rotZ[0][0] = std::cos(m_rot.z);
+            rotZ[0][1] = -std::sin(m_rot.z);
+            rotZ[1][0] = std::sin(m_rot.z);
+            rotZ[1][1] = std::cos(m_rot.z);
+        }
 
         m_mrot = rotZ * rotY * rotX;
         calculatWorld();

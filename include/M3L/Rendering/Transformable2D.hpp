@@ -24,6 +24,8 @@ namespace m3l
 
             void setScale(float _rh, float _rw);
             void setScale(const Point2<float> &_scale);
+            void scale(float _rh, float _rw);
+            void scale(const Point2<float> &_scale);
             [[nodiscard]] const Point2<float> &getScale() const;
             [[nodiscard]] Point2<float> getScale();
 

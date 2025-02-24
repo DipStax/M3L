@@ -68,6 +68,17 @@ namespace m3l
         m_update = true;
     }
 
+    void Transformable2D::scale(float _rh, float _rw)
+    {
+        scale({ _rh, _rw });
+    }
+
+    void Transformable2D::scale(const Point2<float> &_scale)
+    {
+        m_scale *= _scale;
+        m_update = true;
+    }
+
     Point2<float> Transformable2D::getScale()
     {
         return m_scale;
