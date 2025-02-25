@@ -14,9 +14,10 @@ int main()
     obj.load("ressources/Cube.obj");
     texture.load("ressources/texture.bmp");
 
+    window.getCamera().setPosition({ 5.f, 0.f, 5.f });
     model.setTexture(texture);
     model.setObject(obj);
-    model.displayEdge(true, true);
+    // model.displayEdge(true, true);
     while (window.isOpen()) {
         while (window.pollEvent(event)) {}
         window.clear(white);

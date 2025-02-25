@@ -65,7 +65,8 @@ namespace m3l
         m_dib = CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, reinterpret_cast<void **>(&m_data), NULL, 0);
         ReleaseDC(NULL, hdc);
         m_depth.clear();
-        m_depth.resize(_x * _y, std::numeric_limits<float>::lowest());
+        m_depth.resize(_x * _y);
+        std::fill(m_depth.begin(), m_depth.end(), std::numeric_limits<float>::lowest());
     }
 
     void RenderTarget3D::clear(const Color &_clr)
@@ -91,6 +92,7 @@ namespace m3l
         if (_state.texture != nullptr)
             size = _state.texture->getSize().as<float>();
         for (Vertex3D &_vertex : cache) {
+            _vertex.pos = _state.transform * _vertex.pos;
             _vertex.pos = m_cam.project(_vertex.pos);
             if (_state.texture != nullptr)
                 _vertex.txtrPos *= size; // certainly move it to Model and other IDrawable3D

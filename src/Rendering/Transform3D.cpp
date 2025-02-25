@@ -7,9 +7,38 @@ namespace m3l
         m_matrix.identity();
     }
 
+    Transform3D::Transform3D(const Matrix<4, 4> &_matrix)
+        : m_matrix(_matrix)
+    {
+    }
+
     Transform3D::Transform3D(const Point3<float> &_pos, const Point3<float> &_rot, const Point3<float> &_scale)
     {
         m_matrix = buildPosition(_pos) * buildRotation(_rot) * buildScale(_scale);
+    }
+
+    Transform3D Transform3D::operator*(const Transform3D &_rt) const
+    {
+        return Transform3D(m_matrix * _rt.m_matrix);
+    }
+
+    Transform3D &Transform3D::operator*=(const Transform3D &_rt)
+    {
+        m_matrix *= _rt.m_matrix;
+        return *this;
+    }
+
+    Point3<float> Transform3D::operator*(const Point3<float> &_pt) const
+    {
+        Matrix<4, 1> matrix;
+
+        matrix[0][0] = _pt.x;
+        matrix[1][0] = _pt.y;
+        matrix[2][0] = _pt.z;
+        matrix[3][0] = 1;
+
+        Matrix<4, 1> result = m_matrix * matrix;
+        return { result[0][0], result[1][0], result[2][0] };
     }
 
     Matrix<4, 4> Transform3D::buildPosition(const Point3<float> &_pos) const

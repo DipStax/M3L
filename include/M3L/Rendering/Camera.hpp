@@ -2,12 +2,11 @@
 
 #include <array>
 
-#include "M3L/Maths/Point3.hpp"
-#include "M3L/Maths/Matrix.hpp"
+#include "M3L/Rendering/Transformable3D.hpp"
 
 namespace m3l
 {
-    class M3L_API Camera :public Transformable3D
+    class M3L_API Camera : public Transformable3D
     {
         public:
             Camera();

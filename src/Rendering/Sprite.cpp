@@ -29,7 +29,7 @@ namespace m3l
     void Sprite::draw(RenderTarget2D &_target, RenderState2D _state) const
     {
         _state.texture = m_txtr;
-        _state.transfo *= getTransform();
+        _state.transform *= getTransform();
 
         _target.draw(m_vertex.data(), m_vertex.size(), VertexArray::Type::TriangleStrip, _state);
     }

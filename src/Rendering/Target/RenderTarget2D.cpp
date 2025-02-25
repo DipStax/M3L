@@ -27,7 +27,7 @@ namespace m3l
         std::vector<Vertex2D> cache(_vtx, _vtx + _size);
 
         for (Vertex2D &_vertex : cache)
-            _vertex.pos = _state.transfo * _vertex.pos;
+            _vertex.pos = _state.transform * _vertex.pos;
 
         switch (_type) {
             case VertexArray::Type::Point:

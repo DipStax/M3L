@@ -25,6 +25,8 @@ namespace m3l
 
     void Model::draw(RenderTarget3D &_target, RenderState3D _state) const
     {
+        _state.transform *= getTransform();
+
         if (!m_edge || m_withtxtr) {
             _state.texture = m_txtr;
             _target.draw(*m_obj, _state);

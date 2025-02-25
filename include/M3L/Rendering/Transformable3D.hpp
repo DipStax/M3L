@@ -4,7 +4,7 @@
 
 namespace m3l
 {
-    class Transformable3D
+    class M3L_API Transformable3D
     {
         public:
             Transformable3D() = default;
