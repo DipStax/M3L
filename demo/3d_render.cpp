@@ -12,19 +12,20 @@ int main()
     m3l::Object3D obj;
     m3l::Model model;
     m3l::Color white{ 255, 255, 255, 255 };
+    m3l::Color blue{ 0, 0, 255, 255 };
 
     obj.load("ressources/Cube.obj");
     texture.load("ressources/texture.bmp");
 
     m3l::Camera& cam = window.getCamera();
-    cam.setPosition({ 0.2, 0.f, 10.f });
+    cam.setPosition({ 0.f, 0.f, 10.f });
     model.setTexture(texture);
     model.setObject(obj);
-    // model.displayEdge(true, true);
+    model.displayEdge(true, false);
     while (window.isOpen()) {
         while (window.pollEvent(event)) {}
         cam.rotate({ 1, 0, 0 });
-        window.clear();
+        window.clear(blue);
         window.draw(model);
         window.display();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

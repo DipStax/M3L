@@ -43,11 +43,9 @@ namespace m3l
         m3l::Point3<float> proj;
 
         // http://www.codinglabs.net/article_world_view_projection_matrix.aspx
-        std::cout << "Camera projection: " << std::endl << m_mproj << std::endl;
         proj = transform(_pt, m_mproj);
-        std::cout << "Result after transform from cam: " << res << std::endl;
-        res.x = std::floor((proj.x + 1.f) * 0.5f * m_sizeX);
-        res.y = std::floor((1.f - (proj.y + 1.f) * 0.5f) * m_sizeY);
+        res.x = std::floor((-proj.x + 1.f) * 0.5f * m_sizeX);
+        res.y = std::floor((1.f - (-proj.y + 1.f) * 0.5f) * m_sizeY);
         res.z = (proj.z + 1) / 2;
         return res;
     }
