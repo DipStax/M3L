@@ -6,7 +6,7 @@ namespace m3l
         : Window(_x, _y, _title), m_size({ _x, _y })
     {
         create(m_size.x, m_size.y);
-        m_cam.setFov(110.f).setRange(0.1f, 100.f).setSize(static_cast<float>(m_size.x), static_cast<float>(m_size.y)).move({ 0, 0, -10 });
+        m_cam.setFov(110.f).setRange(0.1f, 100.f).setSize(static_cast<float>(m_size.x), static_cast<float>(m_size.y));
     }
 
     const Point2<uint32_t> &BaseRenderWindow::getSize() const
@@ -52,7 +52,7 @@ namespace m3l
             //if (CLR_GET_ALPHA(data2d[it]) == 0)
             data[it] = data3d[it];
             //else
-            //data[it] = data2d[it];
+            // data[it] = data2d[it];
         }
         SetDIBitsToDevice(_draw, 0, 0, size.x, size.y, 0, 0, 0, size.y, data.data(), &bmi, DIB_RGB_COLORS);
     }

@@ -16,6 +16,11 @@ namespace m3l
             Transform3D &operator*=(const Transform3D &_rt);
             Point3<float> operator*(const Point3<float> &_pt) const;
 
+            friend std::ostream& operator<<(std::ostream& _os, const Transform3D& _transfo) {
+                _os << _transfo.m_matrix;
+                return _os;
+            }
+
         private:
             Matrix<4, 4> buildPosition(const Point3<float> &_pos) const;
 

@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iostream>
 
 #include "M3L/Maths/Maths.hpp"
 #include "M3L/Rendering/Target/RenderTarget3D.hpp"
@@ -89,14 +90,22 @@ namespace m3l
         std::vector<Vertex3D> cache(_vtx, _vtx + _size);
         Point2<float> size{ 0, 0 };
 
+        std::cout << "transfo before cam: " << std::endl << _state.transform << std::endl;
+        std::cout << "transfo cam: " << std::endl << m_cam.getTransform() << std::endl;
+        _state.transform *= m_cam.getTransform();
+        std::cout << "transfo after cam: " << _state.transform << std::endl;
         if (_state.texture != nullptr)
             size = _state.texture->getSize().as<float>();
         for (Vertex3D &_vertex : cache) {
+            std::cout << "point before: " << _vertex.pos << std::endl;
             _vertex.pos = _state.transform * _vertex.pos;
+            std::cout << "point after: " << _vertex.pos << std::endl;
             _vertex.pos = m_cam.project(_vertex.pos);
+            std::cout << "point projected: " << _vertex.pos << std::endl;
             if (_state.texture != nullptr)
                 _vertex.txtrPos *= size; // certainly move it to Model and other IDrawable3D
         }
+        std::cout << "--------" << std::endl;
 
         switch (_type) {
             case VertexArray::Type::Point:

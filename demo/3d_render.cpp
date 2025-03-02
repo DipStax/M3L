@@ -1,5 +1,7 @@
 #include "M3L/Rendering/Target/RenderWindow.hpp"
 #include "M3L/Rendering/Model.hpp"
+#include <thread>
+#include <chrono>
 
 int main()
 {
@@ -14,15 +16,18 @@ int main()
     obj.load("ressources/Cube.obj");
     texture.load("ressources/texture.bmp");
 
-    window.getCamera().setPosition({ 5.f, 0.f, 5.f });
+    m3l::Camera& cam = window.getCamera();
+    cam.setPosition({ 0.2, 0.f, 10.f });
     model.setTexture(texture);
     model.setObject(obj);
     // model.displayEdge(true, true);
     while (window.isOpen()) {
         while (window.pollEvent(event)) {}
-        window.clear(white);
+        cam.rotate({ 1, 0, 0 });
+        window.clear();
         window.draw(model);
         window.display();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;
 }
