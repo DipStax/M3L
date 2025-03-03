@@ -1,37 +1,39 @@
 cmake_minimum_required(VERSION 3.24)
 
 # 2D Render
-add_executable(demo_2drender
+add_executable(Graphics2D
     2d_render.cpp
 )
 
-target_compile_options(demo_2drender INTERFACE /W4)
-target_compile_definitions(demo_2drender INTERFACE NOMINMAX)
-target_link_libraries(demo_2drender M3L)
-target_include_directories(demo_2drender INTERFACE ${M3L_INCLUDE_DIRS})
+target_compile_options(Graphics2D INTERFACE /W4)
+target_compile_definitions(Graphics2D INTERFACE NOMINMAX)
+target_link_libraries(Graphics2D M3L_GRAPHICS)
+target_include_directories(Graphics2D INTERFACE ${M3L_INCLUDE_DIRS})
 
 # 2D Render
-add_executable(demo_3drender
+add_executable(Graphics3D
     3d_render.cpp
 )
 
-target_compile_options(demo_3drender INTERFACE /W4)
-target_compile_definitions(demo_3drender INTERFACE NOMINMAX)
-target_link_libraries(demo_3drender M3L)
-target_include_directories(demo_3drender INTERFACE ${M3L_INCLUDE_DIRS})
+target_compile_options(Graphics3D INTERFACE /W4)
+target_compile_definitions(Graphics3D INTERFACE NOMINMAX)
+target_link_libraries(Graphics3D M3L_GRAPHICS)
+target_include_directories(Graphics3D INTERFACE ${M3L_INCLUDE_DIRS})
 
 # Event
-add_executable(demo_event event.cpp)
+add_executable(Event event.cpp)
 
-target_compile_options(demo_event INTERFACE /W4)
-target_compile_definitions(demo_event INTERFACE NOMINMAX)
-target_link_libraries(demo_event M3L)
-target_include_directories(demo_event INTERFACE ${M3L_INCLUDE_DIRS})
+target_compile_options(Event INTERFACE /W4)
+target_compile_definitions(Event INTERFACE NOMINMAX)
+target_link_libraries(Event M3L_GRAPHICS)
+target_include_directories(Event INTERFACE ${M3L_INCLUDE_DIRS})
 
 # Network
-add_executable(demo_network network.cpp)
+add_executable(Network network.cpp)
 
-target_compile_options(demo_network INTERFACE /W4)
-target_compile_definitions(demo_network INTERFACE NOMINMAX)
-target_link_libraries(demo_network M3L)
-target_include_directories(demo_network INTERFACE ${M3L_INCLUDE_DIRS})
+target_compile_options(Network INTERFACE /W4)
+target_compile_definitions(Network INTERFACE NOMINMAX)
+target_link_libraries(Network M3L_NETWORK)
+target_include_directories(Network INTERFACE ${M3L_INCLUDE_DIRS})
+
+set_target_properties(Graphics2D Graphics3D Event Network PROPERTIES FOLDER "Demo")

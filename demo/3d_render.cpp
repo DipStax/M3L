@@ -1,5 +1,5 @@
-#include "M3L/Rendering/Target/RenderWindow.hpp"
-#include "M3L/Rendering/Model.hpp"
+#include "M3L/Graphics/Target/RenderWindow.hpp"
+#include "M3L/Graphics/Model.hpp"
 #include <thread>
 #include <chrono>
 
