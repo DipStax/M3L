@@ -37,9 +37,15 @@ namespace m3l
         bool operator!=(const Point3<T> &_pos);
 
         template<NumericType _T>
-        friend std::ostream &operator<<(std::ostream &_os, const Point3<_T> &_pt);
+        static Point3<_T> as(const Point3<T> &_pt);
+        template<NumericType _T>
+        Point3<_T> as() const;
 
-        Point2<T> as2() const;
+        template<NumericType _T = T>
+        Point2<_T> as2() const;
+
+        template<NumericType _T>
+        friend std::ostream &operator<<(std::ostream &_os, const Point3<_T> &_pt);
     };
 
     template<NumericType T>

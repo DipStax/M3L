@@ -10,14 +10,12 @@ namespace m3l
         public:
             virtual ~RenderTarget2D();
 
-            void setBpp(uint8_t _bpp);
             [[nodiscard]] uint8_t getBpp() const;
 
             [[nodiscard]] virtual const Point2<uint32_t> &getSize() const = 0;
 
-            void draw(const IDrawable2D &_elem, const Texture *_txtr = nullptr);
-            void draw(const Vertex2D *_vtx, size_t _size, const Texture *_txtr);
-            void draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type);
+            void draw(const IDrawable2D &_elem, RenderState2D _state = RenderState2D());
+            void draw(const Vertex2D *_vtx, size_t _size, VertexArray::Type _type, RenderState2D _state = RenderState2D());
 
         protected:
             RenderTarget2D() = default;
@@ -32,10 +30,10 @@ namespace m3l
             void drawLine(const Vertex2D &_start, const Vertex2D &_end);
 
             void drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t> &_range, const Texture *_txtr);
-            void drawTriangle(const Vertex2D *_vtx, int32_t _line, const Point2<uint32_t>& _range);
 
             void setPixel(const Point2<uint32_t> &_pos, Color _clr);
 
+            BITMAPINFO m_bmi;
             HBITMAP m_dib = nullptr;
             uint8_t *m_data = nullptr;
             uint8_t m_bpp;

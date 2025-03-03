@@ -5,8 +5,8 @@
 
 namespace m3l
 {
-    template<size_t Y, size_t X>
-    class Matrix : public std::array<std::array<float, X>, Y>
+    template<size_t Y, size_t X, class T = float>
+    class Matrix : public std::array<std::array<T, X>, Y>
     {
         public:
             Matrix();
@@ -17,10 +17,12 @@ namespace m3l
             void clear();
 
             template<size_t Z>
-            Matrix<Y, Z> operator*(const Matrix<X, Z> &_matrix);
+            Matrix<Y, Z, T> operator*(const Matrix<X, Z, T>& _matrix) const;
 
-            template<size_t _Y, size_t _X>
-            friend std::ostream &operator<<(std::ostream &_os, const Matrix<_Y, _X> &_mat);
+            Matrix<Y, X, T> operator*=(const Matrix<Y, X, T> &_matrix);
+
+            template<size_t _Y, size_t _X, class _T>
+            friend std::ostream &operator<<(std::ostream &_os, const Matrix<_Y, _X, _T> &_mat);
     };
 }
 

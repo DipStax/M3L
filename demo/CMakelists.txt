@@ -23,7 +23,6 @@ target_include_directories(demo_3drender INTERFACE ${M3L_INCLUDE_DIRS})
 # Event
 add_executable(demo_event event.cpp)
 
-
 target_compile_options(demo_event INTERFACE /W4)
 target_compile_definitions(demo_event INTERFACE NOMINMAX)
 target_link_libraries(demo_event M3L)

@@ -15,10 +15,12 @@ namespace m3l
                 Point,
                 Lines,
                 LineStrip,
-                Polygone
+                Triangle,
+                TriangleStrip
             };
 
             VertexArray(size_t _n = 0);
+            VertexArray(Type _type, size_t _n = 0);
             ~VertexArray() = default;
 
             void setType(Type _type);
@@ -37,7 +39,7 @@ namespace m3l
             void clear();
 
         protected:
-            void draw(RenderTarget2D &_target, const Texture *_txtr) const;
+            void draw(RenderTarget2D &_target, RenderState2D _state) const;
 
         private:
             std::vector<Vertex2D> m_pos;
