@@ -1,6 +1,6 @@
 #pragma once
 
-#include "M3L/Graphics/IDrawable2D.hpp"
+#include "M3L/Graphics/2D/IDrawable.hpp"
 #include "M3L/Graphics/VertexArray.hpp"
 
 namespace m3l

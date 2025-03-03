@@ -2,9 +2,9 @@
 
 #include "M3L/Graphics/VertexArray.hpp"
 #include "M3L/Graphics/Rect.hpp"
-#include "M3L/Graphics/IDrawable2D.hpp"
+#include "M3L/Graphics/2D/IDrawable.hpp"
 #include "M3L/Graphics/Texture.hpp"
-#include "M3L/Graphics/Transformable2D.hpp"
+#include "M3L/Graphics/2D/Transformable.hpp"
 
 namespace m3l
 {

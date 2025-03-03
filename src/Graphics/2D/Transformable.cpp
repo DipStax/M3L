@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "M3L/Graphics/Transformable2D.hpp"
+#include "M3L/Graphics/2D/Transformable.hpp"
 
 namespace m3l
 {

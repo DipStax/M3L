@@ -1,4 +1,4 @@
-#include "M3L/Graphics/Target/RenderTarget2D.hpp"
+#include "M3L/Graphics/2D/Target/RenderTarget.hpp"
 #include "M3L/Graphics/VertexArray.hpp"
 
 namespace m3l

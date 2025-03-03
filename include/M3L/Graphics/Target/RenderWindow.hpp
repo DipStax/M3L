@@ -1,6 +1,6 @@
 #pragma once
 
-#include "M3L/Event/Event.hpp"
+#include "M3L/System/Event.hpp"
 #include "M3L/Event/EventPool.hpp"
 #include "M3L/Graphics/Target/BaseRenderWindow.hpp"
 

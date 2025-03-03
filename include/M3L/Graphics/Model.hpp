@@ -1,8 +1,8 @@
 #pragma once
 
-#include "M3L/Graphics/Object3D.hpp"
-#include "M3L/Graphics/Target/RenderTarget3D.hpp"
-#include "M3L/Graphics/Transformable3D.hpp"
+#include "M3L/Graphics/3D/Object.hpp"
+#include "M3L/Graphics/3D/Target/RenderTarget.hpp"
+#include "M3L/Graphics/3D/Transformable.hpp"
 
 namespace m3l
 {

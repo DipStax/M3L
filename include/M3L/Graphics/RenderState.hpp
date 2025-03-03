@@ -1,7 +1,7 @@
 #pragma once
 
-#include "M3L/Graphics/Transformable2D.hpp"
-#include "M3L/Graphics/Transformable3D.hpp"
+#include "M3L/Graphics/2D/Transform.hpp"
+#include "M3L/Graphics/3D/Transform.hpp"
 #include "M3L/Graphics/Texture.hpp"
 
 namespace m3l

@@ -1,7 +1,7 @@
 #include <fstream>
 
-#include "M3L/Graphics/Object3D.hpp"
-#include "M3L/Graphics/Target/RenderTarget3D.hpp"
+#include "M3L/Graphics/3D/Object.hpp"
+#include "M3L/Graphics/3D/Target/RenderTarget.hpp"
 #include "Tool/Splitter.hpp"
 
 namespace m3l

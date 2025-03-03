@@ -1,5 +1,5 @@
 #include "M3L/Graphics/PolyTri.hpp"
-#include "M3L/System/Maths/Maths.hpp"
+#include "M3L/System/Maths.hpp"
 
 namespace m3l
 {

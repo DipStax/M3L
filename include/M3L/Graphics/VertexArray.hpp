@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "M3L/Graphics/Vertex.hpp"
-#include "M3L/Graphics/IDrawable2D.hpp"
+#include "M3L/Graphics/2D/IDrawable.hpp"
 
 namespace m3l
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "M3L/Graphics/IDrawable3D.hpp"
+#include "M3L/Graphics/3D/IDrawable.hpp"
 #include "M3L/Graphics/VertexArray.hpp"
 #include "M3L/Graphics/Camera.hpp"
 

@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "M3L/System/Maths/Point3.hpp"
-#include "M3L/Graphics/IDrawable3D.hpp"
+#include "M3L/Graphics/3D/IDrawable.hpp"
 #include "M3L/Graphics/Vertex.hpp"
 
 namespace m3l

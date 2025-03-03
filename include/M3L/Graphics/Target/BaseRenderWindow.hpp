@@ -1,7 +1,7 @@
 #pragma once
 
-#include "M3L/Graphics/Target/RenderTarget2D.hpp"
-#include "M3L/Graphics/Target/RenderTarget3D.hpp"
+#include "M3L/Graphics/2D/Target/RenderTarget.hpp"
+#include "M3L/Graphics/3D/Target/RenderTarget.hpp"
 #include "M3L/System/Window.hpp"
 
 namespace m3l

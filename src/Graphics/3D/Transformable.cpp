@@ -1,4 +1,4 @@
-#include "M3L/Graphics/Transformable3D.hpp"
+#include "M3L/Graphics/3D/Transformable.hpp"
 
 namespace m3l
 {
