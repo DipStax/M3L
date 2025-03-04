@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Tool/PreProcessing.hpp"
+#include <concepts>
+#include <type_traits>
+
+#include "Tool/meta.hpp"
 
 #define WIN_SOCKET SOCKET
 

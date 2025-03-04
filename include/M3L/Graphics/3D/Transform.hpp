@@ -2,6 +2,7 @@
 
 #include "M3L/System/Maths/Point3.hpp"
 #include "M3L/System/Maths/Matrix.hpp"
+#include "Tool/Export.hpp"
 
 namespace m3l
 {

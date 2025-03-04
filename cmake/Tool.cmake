@@ -17,3 +17,5 @@ target_link_libraries (M3L_TOOL
     PUBLIC
         M3L_INTERFACE
 )
+
+target_include_directories(M3L_TOOL INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include/Tool)

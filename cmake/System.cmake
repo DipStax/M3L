@@ -22,4 +22,3 @@ target_link_libraries (M3L_SYSTEM
         M3L_INTERFACE
         M3L_TOOL
 )
-
