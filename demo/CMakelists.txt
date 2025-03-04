@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
+link_directories("${CMAKE_SOURCE_DIR}/../Debug")
+
 # 2D Render
 add_executable(Graphics2D
     2d_render.cpp

@@ -1,6 +1,6 @@
 #include <numeric>
 
-#include "M3L/System/Container/TriggerMap.hpp"
+#include "M3L/Event/TriggerMap.hpp"
 
 namespace m3l
 {

@@ -24,7 +24,7 @@ add_library (M3L_GRAPHICS
 target_link_libraries (M3L_GRAPHICS
     PUBLIC
         M3L_INTERFACE
-        M3L_SYSTEM
         M3L_EVENT
+        M3L_SYSTEM
 )
 

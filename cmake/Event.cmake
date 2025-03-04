@@ -14,13 +14,12 @@ file (GLOB_RECURSE SRC_M3L_EVENT
 msvc_source_file (SRC_M3L_EVENT)
 
 add_library (M3L_EVENT
-    SHARED
+    INTERFACE
         ${SRC_M3L_EVENT}
 )
 
 target_link_libraries (M3L_EVENT
-    PUBLIC
+    INTERFACE
         M3L_INTERFACE
-        M3L_SYSTEM
 )
 
