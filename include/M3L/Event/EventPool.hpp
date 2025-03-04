@@ -1,7 +1,6 @@
 #pragma once
 
-#include "M3L/Container/TriggerMap.hpp"
-#include "M3L/Event/Event.hpp"
+#include "M3L/Event/TriggerMap.hpp"
 #include "M3L/Event/Trigger.hpp"
 
 namespace m3l

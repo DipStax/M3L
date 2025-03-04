@@ -5,9 +5,8 @@
 
 #include <windows.h>
 
-#include "M3L/Maths/Point2.hpp"
-#include "M3L/Rendering/Color.hpp"
-#include "M3L/Event/Event.hpp"
+#include "M3L/System/Maths/Point2.hpp"
+#include "M3L/System/Event.hpp"
 
 #ifndef WIN_MAXTITLE
     #define WIN_MAXTITLE 256

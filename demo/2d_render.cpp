@@ -1,5 +1,5 @@
-#include "M3L/Rendering/Target/RenderWindow.hpp"
-#include "M3L/Rendering/Sprite.hpp"
+#include "M3L/Graphics/Target/RenderWindow.hpp"
+#include "M3L/Graphics/Sprite.hpp"
 
 int main()
 {

@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-#include "M3L/Event/Event.hpp"
 #include "M3L/System/ThreadPool.hpp"
 
 namespace m3l
