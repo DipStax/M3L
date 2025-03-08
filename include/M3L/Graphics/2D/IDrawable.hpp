@@ -1,6 +1,5 @@
 #pragma once
 
-#include "M3L/Graphics/Texture.hpp"
 #include "M3L/Graphics/RenderState.hpp"
 
 namespace m3l

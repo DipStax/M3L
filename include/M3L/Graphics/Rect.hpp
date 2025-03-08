@@ -1,6 +1,7 @@
 #pragma once
 
 #include "M3L/System/Maths/Point2.hpp"
+#include "Tool/Export.hpp"
 
 namespace m3l
 {

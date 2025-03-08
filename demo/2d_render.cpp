@@ -1,5 +1,6 @@
 #include "M3L/Graphics/Target/RenderWindow.hpp"
 #include "M3L/Graphics/Sprite.hpp"
+#include "M3L/Graphics/2D/Rectangle.hpp"
 
 int main()
 {
@@ -32,12 +33,18 @@ int main()
     vertex2.append({ { 350, 225 }, { 0, 0 }, red });
     vertex2.append({ { 375, 200 }, { 0, 0 }, blue });
 
+    m3l::Rectangle2D rect{ 50, 50 };
+
+    rect.setPosition(200, 50);
+    rect.rotate(135);
+
     while (window.isOpen()) {
         while (window.pollEvent(event)) {}
         window.clear(blue);
         window.draw(sprite);
         window.draw(vertex);
         window.draw(vertex2);
+        window.draw(rect);
         window.display();
     }
     return 0;
